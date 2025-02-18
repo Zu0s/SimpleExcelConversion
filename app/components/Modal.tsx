@@ -1,13 +1,12 @@
 'use client'
 
 import { Button, Dialog, DialogPanel, DialogTitle } from '@headlessui/react'
-import { useState } from 'react'
 import { buttonStyles } from '../groupedStyles'
 
 export default function Modal(props: { isOpen: boolean, setIsOpen: Function, mainSettings: any }) {
 
   function close() {
-    props.setIsOpen(false)
+    return props.setIsOpen(false)
   }
 
   return (
@@ -29,7 +28,7 @@ export default function Modal(props: { isOpen: boolean, setIsOpen: Function, mai
               {props.mainSettings.exisitingDupesFound.length > 0 ? 
                 <div>
                   <h1 className="text-2xl">Error Log: </h1>
-                  {props.mainSettings.exisitingDupesFound.map((currentErrorObj: any) => {
+                  {props.mainSettings.exisitingDupesFound.map((currentErrorObj: any, key = 1) => {
                     return <p className='ml-5 mt-2 text-lg text-[#E54800]'><span data-tooltip={`Shield At Work file`} className='border-b-2 border-[#1B1917] cursor-default'>{`${currentErrorObj.orignalName}`}</span>: found duplicate at <span className='border-b-2 border-[#1B1917] cursor-default' data-tooltip={`Field Notes File`}>{`${currentErrorObj.dupeFoundName}`}</span> with : <span data-tooltip={`Field Notes File  Header`} className='border-b-2 border-[#706E6C] text-xl text-[#FF5100] cursor-default'>{`${currentErrorObj.issueFound}`}</span></p>
                   })}
                   <p className='mt-4'><span className='text-lg'>Disclaimer:</span> File is still downloadable but <span className='text-lg border-b-2 border-[#706E6C] cursor-default' data-tooltip={`Any error above WILL NOT be updates in field notes`}>DO NOT</span> recomend due to errors above</p>

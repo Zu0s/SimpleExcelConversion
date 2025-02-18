@@ -1,7 +1,6 @@
 'use client'
 
 import { useState } from 'react';
-import Image from 'next/image';
 import Modal from './components/Modal';
 import FileImporter from './components/FileImporter';
 import { completedPlanHeaders } from './keys';
@@ -31,22 +30,22 @@ export default function Home() {
   //field note sheet
   const [fieldNoteSheet, setFieldNoteSheet]:any = useState('test2');
 
-  function checkState() {
-    //gonna use this for testing options
-    let excelSheetToObject = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]])
-    console.log('Checking Legal Shield excel sheet object below:')
-    console.log(excelSheetToObject)
-    console.log('-----')
-    console.log('Checking Field Note excel sheet object below')
-    // console.log(fieldNoteSheet)
-    let fieldNoteSheetToObject = XLSX.utils.sheet_to_json(fieldNoteSheet.Sheets[fieldNoteSheet.SheetNames[0]])
-    console.log(fieldNoteSheetToObject)
-    console.log(fieldNoteSheet)
-  }
+//   function checkState() {
+//     //gonna use this for testing options
+//     let excelSheetToObject = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]])
+//     console.log('Checking Legal Shield excel sheet object below:')
+//     console.log(excelSheetToObject)
+//     console.log('-----')
+//     console.log('Checking Field Note excel sheet object below')
+//     // console.log(fieldNoteSheet)
+//     let fieldNoteSheetToObject = XLSX.utils.sheet_to_json(fieldNoteSheet.Sheets[fieldNoteSheet.SheetNames[0]])
+//     console.log(fieldNoteSheetToObject)
+//     console.log(fieldNoteSheet)
+//   }
 
     /* Handle Modal */
-    let [isOpen, setIsOpen] = useState(false)
-    function modalOpen() { setIsOpen(true) }
+    const [isOpen, setIsOpen] = useState(false)
+    // function modalOpen() { setIsOpen(true) }
 
   /* Handle Sheet Functions */
 
@@ -63,9 +62,9 @@ export default function Home() {
         })
 
         // Scuffed .map()
-        let filterdSheet = []
+        const filterdSheet: any = []
         for (let i = 0; i < objectMainSheet.length; i ++) {
-            let currentItem: any = objectMainSheet[i]
+            const currentItem: any = objectMainSheet[i]
             
             //Removes spaces, Phone number logic
             function removeSpacesAndNumbers(obj: any) { // CHANGE PHONE NUMBER LOGIC - more consistent and less janky
@@ -87,7 +86,7 @@ export default function Home() {
             }
 
             function nameFixer(currentName: any) {
-                let nameArr = currentName.toLowerCase().split(' ')
+                const nameArr = currentName.toLowerCase().split(' ')
                 //remove middle initial
                 if (nameArr.length > 1) { nameArr.splice(0, nameArr.length, ...nameArr.filter((currName:any) => currName.length > 1)) }
 
@@ -97,9 +96,9 @@ export default function Home() {
             }
 
             //Check Duplicates
-            let dupeArray: any[] = []
+            const dupeArray: any[] = []
             for(let tempI = i + 1; objectMainSheet[tempI] !== undefined && nameFixer(currentItem['First Name']) === nameFixer(objectMainSheet[tempI]['First Name']) && nameFixer(currentItem['Last Name']) === nameFixer(objectMainSheet[tempI]['Last Name']) && currentItem['Email'].toLowerCase() === objectMainSheet[tempI]['Email'].toLowerCase() ; tempI ++) {
-                let currentObject = objectMainSheet[tempI]; 
+                const currentObject = objectMainSheet[tempI]; 
                 removeSpacesAndNumbers(currentObject)
                 dupeCounter++
                 dupeArray.push(currentObject)
@@ -109,8 +108,8 @@ export default function Home() {
             // Logic for Plan Description Stiching
             let filteredPlanDescription = currentItem['Plan Description']
             if(dupeArray.length !== 0) {
-                let planDescriptionArray = dupeArray.map(currentPlan => { return currentPlan['Plan Description'] })
-                let filteredArr = planDescriptionArray.reduce((r, a) => r.concat(a, ' | '), [])
+                const planDescriptionArray = dupeArray.map(currentPlan => { return currentPlan['Plan Description'] })
+                const filteredArr = planDescriptionArray.reduce((r, a) => r.concat(a, ' | '), [])
                 if (filteredArr[filteredArr.length -1 ] = ' | ') { filteredArr.splice(filteredArr.length - 1, 1) }
                 
                 filteredPlanDescription = `${currentItem['Plan Description']} | ${filteredArr.join('')}`.replace('+', '|')
@@ -119,8 +118,8 @@ export default function Home() {
             //spheres logic
             let filteredSpheres = ' '
             if (mainSettings.spheres.length > 0) {
-                let spheresArray = mainSettings.spheres.map((currentItem: any) => currentItem.value)
-                let filteredArr = spheresArray.reduce((r:any, a: any) => r.concat(a, ' | '), [])
+                const spheresArray = mainSettings.spheres.map((currentItem: any) => currentItem.value)
+                const filteredArr = spheresArray.reduce((r:any, a: any) => r.concat(a, ' | '), [])
                 if (filteredArr[filteredArr.length -1 ] = ' | ') { filteredArr.splice(filteredArr.length - 1, 1) }
                 filteredSpheres = filteredArr.join('')
             }
@@ -154,9 +153,9 @@ export default function Home() {
             function handleUpdate() {
                 //create reffernce array to check for updates to Field Notes
                 existingContacts = fieldNoteMainSheet.filter((currContact:any) => {
-                    let currContactEmail = currContact['Email'] !== undefined ? currContact['Email'].toLowerCase() : 'No Curr Contact Email'
-                    let currentItemEmail = currentItem['Email'] !== undefined ? currentItem['Email'].toLowerCase() : 'No Curr Item Email'
-                    let currentContactPhones = [currContact['Cell Phone'] !== undefined ? currContact['Cell Phone'].replace(/[^a-zA-Z0-9]/g, ''): 'No Curr Contact Cell Phone']
+                    const currContactEmail = currContact['Email'] !== undefined ? currContact['Email'].toLowerCase() : 'No Curr Contact Email'
+                    const currentItemEmail = currentItem['Email'] !== undefined ? currentItem['Email'].toLowerCase() : 'No Curr Item Email'
+                    const currentContactPhones = [currContact['Cell Phone'] !== undefined ? currContact['Cell Phone'].replace(/[^a-zA-Z0-9]/g, ''): 'No Curr Contact Cell Phone']
                     
                     if ([currContact['Legal Plan #'], currContact['IDShield #'], currContact['CDLP #'],].indexOf(currentItem['Member Number']) > -1 || currContactEmail === currentItemEmail || currentContactPhones.indexOf(currentItem['Cell Phone'].replace(/[^a-zA-Z0-9]/g, '')) > -1)   {
                         return true
@@ -177,7 +176,7 @@ export default function Home() {
                         const tempCurrentItemPhone = currentItem['Cell Phone'].replace(/[^a-zA-Z0-9]/g, '')
                         const dupeArrayMemberNums = dupeArray.map((currentDupedobj: any) => { return { 'Member Number': currentDupedobj['Member Number'] } }) // MIGHT BE USELESS
 
-                        let tempArr = existingContacts.map((currentObj: any) => {
+                        const tempArr = existingContacts.map((currentObj: any) => {
                             const keys = ['Email', 'Cell Phone', 'Legal Plan #', 'IDShield #', 'CDLP #']
                             const memberNumberCheck = new Set (['Legal Plan #', 'IDShield #', 'CDLP #'])
 
@@ -294,8 +293,8 @@ export default function Home() {
     }
 
   function downloadSheet() {
-    let newWS = XLSX.utils.json_to_sheet(mainSettings.convertedSheet, { header: completedPlanHeaders })
-    let newWB = XLSX.utils.book_new()
+    const newWS = XLSX.utils.json_to_sheet(mainSettings.convertedSheet, { header: completedPlanHeaders })
+    const newWB = XLSX.utils.book_new()
     XLSX.utils.book_append_sheet(newWB, newWS, "NewDownload" )
     XLSX.writeFile(newWB, `simpleExcelConvertDownload.xlsx`)
   }
@@ -304,7 +303,7 @@ export default function Home() {
 
   /* Handles Toop Tip Text */
   let toolTipConvert = ''
-  let tempToolTipConvert = []
+  const tempToolTipConvert = []
   if (mainSettings.groupNumber === '') {tempToolTipConvert.push('Group #')} if (mainSettings.company === '') { tempToolTipConvert.push('Company') } if (fieldNoteSheet === 'test2') { tempToolTipConvert.push('Field Note Sheet') }
   toolTipConvert = tempToolTipConvert.join(', ')
 

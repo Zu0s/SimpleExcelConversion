@@ -57,7 +57,7 @@ export default function FileImporter(props: any) {
         ev.preventDefault()
     };
 
-    const handleDragEnter = (ev: any) => {
+    const handleDragEnter = () => {
         console.log('user is in the box')
         if (isDragging === true) {
             return
@@ -116,8 +116,8 @@ export default function FileImporter(props: any) {
         },
     })
     const selectStyles: StylesConfig<ConsoleConstructorOptions, true> = {
-        control: (styles: any, { isFocused }) => ({ ...styles, backgroundColor: '#1B1917', color: '#FF5100',border:0 ,boxShadow: 'none' ,borderBlockColor:'#292524', padding: '0.3rem'}),
-        option: (styles: any, { data, isDisabled, isFocused, isSelected }) => { 
+        control: (styles: any) => ({ ...styles, backgroundColor: '#1B1917', color: '#FF5100',border:0 ,boxShadow: 'none' ,borderBlockColor:'#292524', padding: '0.3rem'}),
+        option: (styles: any, { isFocused, isSelected }) => { 
 
             return {
                 ...styles,
