@@ -165,7 +165,7 @@ export default function FileImporter(props: any) {
                         <br/>
                         <input 
                             onWheel={(e) => (e.target as HTMLInputElement).blur()}
-                            className='bg-[#1B1917] p-2 px-8 focus:outline-hidden outline-none w-full'
+                            className='bg-[#1B1917] p-2 px-8 focus:outline-hidden outline-none w-full rounded-sm'
                             type='number'
                             name='groupNumber'
                             onChange={handleInputChange}
@@ -176,7 +176,7 @@ export default function FileImporter(props: any) {
                         <label className='modification-subTitle'>Company </label>
                         <br/>
                         <input 
-                            className='bg-[#1B1917] p-2 px-8 focus:outline-hidden outline-none w-full'
+                            className='bg-[#1B1917] p-2 px-8 focus:outline-hidden outline-none w-full rounded-sm'
                             type='text'
                             name='company'
                             onChange={handleInputChange}
