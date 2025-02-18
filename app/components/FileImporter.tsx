@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import { referralSourceOptions, spheresOptions } from '../keys'
-import Select from 'react-select';
+import { buttonStyles } from '../groupedStyles';
+import Select, { StylesConfig } from 'react-select';
 import * as XLSX from 'xlsx';
+import { ConsoleConstructorOptions } from 'console';
 
 export default function FileImporter(props: any) {
     const [isDragging, setIsDragging] = useState(false)
@@ -99,39 +101,92 @@ export default function FileImporter(props: any) {
         }))
     }
 
+    /* Select Styles */
+    const dot = (color:any = 'transparent') => ({
+        alignItems: 'center',
+        display: 'flex',
+        ':before': {
+            backgroundColor: color,
+            borderRadius: 10,
+            content: '" "',
+            display: 'block',
+            marginRight: 8,
+            height: 10,
+            width: 10,
+        },
+    })
+    const selectStyles: StylesConfig<ConsoleConstructorOptions, true> = {
+        control: (styles: any, { isFocused }) => ({ ...styles, backgroundColor: '#1B1917', color: '#FF5100',border:0 ,boxShadow: 'none' ,borderBlockColor:'#292524', padding: '0.3rem'}),
+        option: (styles: any, { data, isDisabled, isFocused, isSelected }) => { 
+
+            return {
+                ...styles,
+                backgroundColor: isSelected 
+                ? '#292524'
+                : isFocused
+                ? '#292524'
+                : '#1B1917',
+                color: '#FF5100',
+            }
+        },
+        noOptionsMessage: (styles) => ({ ...styles, backgroundColor: '#1B1917', color:'#FF5100'}),
+        menu: (styles) => ({ ...styles, backgroundColor: '#1B1917'}),
+        menuList: (styles) => ({
+            ...styles,
+           "::-webkit-scrollbar": { width: "9px" },
+           "::-webkit-scrollbar-track": { background: '#292524' },
+           "::-webkit-scrollbar-thumb": { background: '#FF5100' },
+           "::-webkit-scrollbar-thumb:hover": { background: '#b23800' }
+        }),
+        indicatorSeparator: (styles) => ({ ...styles, backgroundColor: '#292524'}),
+        input: (styles) => ({ ...styles, ...dot(), color: '#FF5100'}),
+        placeholder: (styles) => ({ ...styles, ...dot(), color: '#FF5100' }),
+        singleValue: (styles) => ({ ...styles, ...dot(), color: '#FF5100' }),
+        dropdownIndicator: (styles: any) => ({ ...styles, color: '#706E6C' }),
+        clearIndicator: (styles) => ({ ...styles, color: '#706E6C'}) ,
+        multiValue: (styles) => ({ ...styles, color: '#FF5100', backgroundColor: '#292524' }),
+        multiValueLabel: (styles) => ({ ...styles, color: '#FF5100' }),
+        multiValueRemove: (styles) => ({ ...styles, color: '#FF5100', ':hover': { backgroundColor: '#7f2800', color: '#292524'}  }),
+    }
+
     return(
         <div 
-            className='flex flex-col border-2 min-h-full w-full p-4 rounded-sm'
+            className='flex flex-col border-8 border-[#706E6C] border-dashed bg-[#292524] min-h-full w-full p-6 rounded-md'
             id='file-importer--main'
             onDragEnter={handleDragEnter}    
             onDragOver={handleDragOver}
             onDragLeave={handleDragLeave}
         >   
             {props.mainSettings.sheetName !== '' ?
-                    <div className='modification-box'>
-                        <p className='modification-title'>Modifications</p>
+                    <div className='modification-box text-2xl px-5'>
+                        <h1 className='text-3xl mb-4 border-b-2 border-bottom inline-block border-[#706E6C]'>Modifications</h1>
+                        <br/>
                         <label className='modification-subTitle'>Group # </label>
+                        <br/>
                         <input 
                             onWheel={(e) => (e.target as HTMLInputElement).blur()}
-                            className='modification-text'
+                            className='bg-[#1B1917] p-2 px-8 focus:outline-hidden outline-none w-full'
                             type='number'
                             name='groupNumber'
                             onChange={handleInputChange}
                             value={props.mainSettings.groupNumber}
                             ></input>
                         <br/>
+                        <br/>
                         <label className='modification-subTitle'>Company </label>
+                        <br/>
                         <input 
-                            className='modification-text'
+                            className='bg-[#1B1917] p-2 px-8 focus:outline-hidden outline-none w-full'
                             type='text'
                             name='company'
                             onChange={handleInputChange}
                             value={props.mainSettings.company}
                             ></input>
-                        <br/>
+                        <br/><br/>
                         <label className='modification-subTitle'>Language - (Pick One) </label>
                         <Select
                             name='language'
+                            styles={selectStyles}
                             defaultValue={{ value: 'English', label: 'English' }}
                             options={[{ value: 'English', label: 'English' }, { value: 'Spanish', label: 'Spanish' }]}
                             value={props.mainSettings.language}
@@ -141,6 +196,7 @@ export default function FileImporter(props: any) {
                         <label className='modification-subTitle'>Referal Source - (Pick One)</label>
                         <Select 
                             name='refferalSource'
+                            styles={selectStyles}
                             options={referralSourceOptions}
                             value={props.mainSettings.refferalSource}
                             onChange={handleSelectChange}
@@ -149,44 +205,45 @@ export default function FileImporter(props: any) {
                         <label className='modification-subTitle'>Spheres - (Multiple)</label>
                         <Select 
                             name='spheres'
+                            styles={selectStyles}
                             isMulti
                             options={spheresOptions}
                             value={props.mainSettings.spheres}
                             onChange={handleSelectChange}
                         />
-                        <br />
                     </div>
                 :
                     <>
-                        <p className={`file-importer--text ${isDragging === true ? 'allowChildDragging' : ''} text-5xl mt-3 `}>Select File Below</p>
+                        <p className={`file-importer--text ${isDragging === true ? 'allowChildDragging' : ''} text-5xl mt-3 self-center justify-self-center`}>Select File Below</p>
                     </>
             }
+            <div className='grid grid-cols-2 gap-3 mt-8 border-t-2 border-[#706E6C] pt-5'>
+                <label className={`${props.mainSettings.sheetName === '' ? `${buttonStyles} text-xl w-fit justify-self-center`  : 'text-3xl'} self-center cursor-pointer`} htmlFor='file-importer--input'>{` ${props.mainSettings.sheetName === '' ? "Select Legal Shield Files"  : props.mainSettings.sheetName} `}</label>
+                <input
+                    className={`${isDragging === true ? 'allowChildDragging' : ''} `}
+                    id='file-importer--input'
+                    type='file'
+                    accept=''
+                    onChange={handleMainFileChange}
+                >
+                </input>
 
-            <label className={`${props.mainSettings.sheetName === '' ? 'border rounded-md p-2 mt-10 cursor-pointer'  : ''} self-center `} htmlFor='file-importer--input'>{` ${props.mainSettings.sheetName === '' ? "Select Files"  : props.mainSettings.sheetName} `}</label>
+                {props.mainSettings.sheetName !== '' || props.mainSettings.fieldNoteSheetName !== '' ?
+                    <button className={`${buttonStyles} text-3xl w-fit self-center row-span-2 self-center justify-self-center`} onClick={handleRemoveFile}>Remove</button>
+                    : undefined
+                }
 
-            {props.mainSettings.sheetName !== '' ?
-                <button className='body-button' onClick={handleRemoveFile}>Remove</button>
-                : undefined
-            }
+                <label className={`${props.mainSettings.fieldNoteSheetName === '' ? `${buttonStyles} text-xl w-fit justify-self-center`  : 'text-3xl'} self-center cursor-pointer`}  htmlFor='fieldNote-importer'>{` ${props.mainSettings.fieldNoteSheetName === '' ? "Select Field Note File"  : props.mainSettings.fieldNoteSheetName} `}</label>
+                <input
+                    className='file-picker'
+                    id='fieldNote-importer'
+                    type='file'
+                    accept=''
+                    onChange={handleFieldNoteFileChange}
+                >
+                </input>
+            </div>
             
-            <input
-                className={`${isDragging === true ? 'allowChildDragging' : ''} `}
-                id='file-importer--input'
-                type='file'
-                accept=''
-                onChange={handleMainFileChange}
-            >
-            </input>
-            <br/>
-            <label className={`${props.mainSettings.fieldNoteSheetName === '' ? 'border rounded-md p-2 cursor-pointer'  : ''} self-center`}  htmlFor='fieldNote-importer'>{` ${props.mainSettings.fieldNoteSheetName === '' ? "Select Field Note File"  : props.mainSettings.fieldNoteSheetName} `}</label>
-            <input
-                className='file-picker'
-                id='fieldNote-importer'
-                type='file'
-                accept=''
-                onChange={handleFieldNoteFileChange}
-            >
-            </input>
         </div>
     )
 }

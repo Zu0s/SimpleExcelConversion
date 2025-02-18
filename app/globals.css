@@ -5,6 +5,13 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --textColor: #FF5100;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
 }
 
 @media (prefers-color-scheme: dark) {
@@ -26,22 +33,25 @@ body {
 }
 
 [data-tooltip]::before {
+  pointer-events: none;
   content: attr(data-tooltip);
   position: absolute;
   opacity: 0;
 
   padding: 10px;
-  color: #333;
+  color: #FF5100;
+  border: 1px solid;
+  border-color: #706E6C;
   border-radius: 10px;
-  box-shadow: 2px 2px 1px silver;
+  box-shadow: 2px 2px 1px #706E6C;
 }
 
 [data-tooltip]:hover::before {
   /* needed - do not touch */
   opacity: 1;
-  font-size: 1rem;
+  font-size: 1.125rem;
   /* customizable */
-  background: #F6F6F6;
+  background: #292524;
   margin-top: -50px;
   margin-left: 10px;
 }
@@ -51,3 +61,4 @@ input[type='file'] {
   position: absolute;
   z-index: -1;
 }
+

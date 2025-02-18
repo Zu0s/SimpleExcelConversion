@@ -1,0 +1,1 @@
+export const buttonStyles = 'rounded-md border border-2 border-[#706E6C] bg-[#1B1917] px-3.5 py-2.5 text-xl font-semibold shadow-xs hover:bg-[#292524] focus-visible:outline-2 focus-visible:outline-offset-2'
