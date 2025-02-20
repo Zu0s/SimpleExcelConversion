@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { referralSourceOptions, spheresOptions } from '../keys'
+import { shittyDb } from '../keys'
 import { buttonStyles } from '../groupedStyles';
 import Select, { StylesConfig } from 'react-select';
 import * as XLSX from 'xlsx';
@@ -197,7 +197,7 @@ export default function FileImporter(props: any) {
                         <Select 
                             name='refferalSource'
                             styles={selectStyles}
-                            options={referralSourceOptions}
+                            options={props.userSettings.referralSourceOptions}
                             value={props.mainSettings.refferalSource}
                             onChange={handleSelectChange}
                         />
@@ -207,7 +207,7 @@ export default function FileImporter(props: any) {
                             name='spheres'
                             styles={selectStyles}
                             isMulti
-                            options={spheresOptions}
+                            options={props.userSettings.spheresOptions}
                             value={props.mainSettings.spheres}
                             onChange={handleSelectChange}
                         />

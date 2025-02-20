@@ -1,9 +1,9 @@
 'use client'
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Modal from './components/Modal';
 import FileImporter from './components/FileImporter';
-import { completedPlanHeaders } from './keys';
+import { referralSourceOptions, shittyDb, spheresOptions } from './keys';
 import { buttonStyles } from './groupedStyles';
 
 import * as XLSX from 'xlsx'
@@ -24,29 +24,59 @@ const defaultMainSettings:object = {
 }
 
 export default function Home() {
-  const [mainSettings, setMainSettings]:any = useState(defaultMainSettings);
-  //main sheet from user
-  const [workbook, setWorkbook]:any = useState('test');
-  //field note sheet
-  const [fieldNoteSheet, setFieldNoteSheet]:any = useState('test2');
+    const [mainSettings, setMainSettings]:any = useState(defaultMainSettings);
+    //main sheet from user
+    const [workbook, setWorkbook]:any = useState('test');
+    //field note sheet
+    const [fieldNoteSheet, setFieldNoteSheet]:any = useState('test2');
 
-//   function checkState() {
-//     //gonna use this for testing options
-//     let excelSheetToObject = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]])
-//     console.log('Checking Legal Shield excel sheet object below:')
-//     console.log(excelSheetToObject)
-//     console.log('-----')
-//     console.log('Checking Field Note excel sheet object below')
-//     // console.log(fieldNoteSheet)
-//     let fieldNoteSheetToObject = XLSX.utils.sheet_to_json(fieldNoteSheet.Sheets[fieldNoteSheet.SheetNames[0]])
-//     console.log(fieldNoteSheetToObject)
-//     console.log(fieldNoteSheet)
-//   }
 
     /* Handle Modal */
     const [isOpen, setIsOpen] = useState(false)
-    // function modalOpen() { setIsOpen(true) }
 
+    /* Handles Password */
+    const [passInput, setPassInput] = useState<string>('')
+
+    const [userSettings, setUserSettings]: any = useState({ 
+        password: '', 
+        user: '',
+    })
+
+    function handlePassInputChange(e: any){
+        const {value} = e.target
+        setPassInput(() => (value))
+    }
+
+    function checkPass(inputPass: string) {
+        const foundUser = shittyDb.users.find((currentUser) => (inputPass === currentUser.password))
+
+        if (foundUser) {
+            setUserSettings((prevUserSettings: any) => {
+
+                return ({ // allow access
+                    ...shittyDb[foundUser.user as keyof typeof shittyDb],
+                    password: foundUser.password,
+                    user: foundUser.user,
+                })
+            })
+            window.localStorage.setItem('tempPass', inputPass)
+        } else {
+            setIsOpen(true)
+        }
+    }
+
+    function handleSubmit(e: any) { 
+        e.preventDefault();
+        checkPass(passInput)
+    }
+
+    useEffect(() => {
+        const userPref = window.localStorage.getItem('tempPass')
+
+        if(userPref) { 
+            checkPass(userPref)
+        }
+    }, [])
   /* Handle Sheet Functions */
 
     function convertSheet() {
@@ -145,6 +175,12 @@ export default function Home() {
                         if(isMemberNumber) { returnedItem = found['Member Number'] } 
                         else { returnedItem = found['Monthly Premium'] }
                     }
+                } else if (typeOfPlan === 'Buisness') {
+                    const found = dupeArray.find(tempItem => {return tempItem['Plan Description'].toLowerCase().includes('business') && Array.from(tempItem['Member Number'])[0] !== '7'})
+                    if (found !== undefined) {
+                        if(isMemberNumber) { returnedItem = found['Member Number'] } 
+                        else { returnedItem = found['Monthly Premium'] }
+                    }
                 }
                 return returnedItem
             }
@@ -222,10 +258,10 @@ export default function Home() {
             /* New JSON Object */
             filterdSheet.push({
                 ...(handleUpdate() && existingContacts[0]),
-                'Legal Plan #': (currentItem['Plan Description'].includes('COMMERCIAL') ? ' ' : Array.from( currentItem['Member Number'] )[0] === '1' ? currentItem['Member Number'] : dupeArray.length !== 0 ? findPlan('Legal Shield', true) : '' ), 
+                'Legal Plan #': (currentItem['Plan Description'].toLowerCase().includes('commercial') ? ' ' : currentItem['Plan Description'].toLowerCase().includes('business') ? ' ' : Array.from( currentItem['Member Number'] )[0] === '1' ? currentItem['Member Number'] : dupeArray.length !== 0 ? findPlan('Legal Shield', true) : '' ), 
                 'IDShield #': (Array.from( currentItem['Member Number'] )[0] === '7' ? currentItem['Member Number']: dupeArray.length !== 0 ? findPlan('IDShield', true) :  ' '), 
-                'CDLP #': (currentItem['Plan Description'].includes('COMMERCIAL') ? currentItem['Member Number'] : dupeArray.length !== 0 ? findPlan('Commercial', true) : ' '), 
-                'Small Buisness Plan #': ' ', 
+                'CDLP #': (currentItem['Plan Description'].toLowerCase().includes('commercial') ? currentItem['Member Number'] : dupeArray.length !== 0 ? findPlan('Commercial', true) : ' '), 
+                'Small Buisness Plan #': (currentItem['Plan Description'].toLowerCase().includes('business') ? currentItem['Member Number'] : dupeArray.length !== 0 ? findPlan('Buisness', true) : ''), 
                 'First Name (0r) Group Account Name': (nameFixer(currentItem['First Name'])),
                 'Last Name': (nameFixer(currentItem['Last Name'])),
                 'Address': currentItem['Address 1'],
@@ -241,10 +277,10 @@ export default function Home() {
                 'Cell Phone': currentItem['Cell Phone'] ,
                 'Birthday': (currentItem['Date of Birth']), 
                 'Annual Premium': currentItem['Annual Premium'],
-                'LegalShield Monthly Rate': (currentItem['Plan Description'].includes('COMMERCIAL') ? ' ' : Array.from( currentItem['Member Number'] )[0] === '1' ? currentItem['Monthly Premium'] : dupeArray.length !== 0 ? findPlan('Legal Shield', false) : ''  ), 
+                'LegalShield Monthly Rate': (currentItem['Plan Description'].toLowerCase().includes('commercial') ? ' ' : currentItem['Plan Description'].toLowerCase().includes('business') ? ' ' : Array.from( currentItem['Member Number'] )[0] === '1' ? currentItem['Monthly Premium'] : dupeArray.length !== 0 ? findPlan('Legal Shield', false) : ''  ), 
                 'IDShield Monthly Rate': (Array.from( currentItem['Member Number'] )[0] === '7' ? currentItem['Monthly Premium'] : dupeArray.length !== 0 ? findPlan('IDShield', false) : ' '), 
-                'CDLP Monthly Rate': (currentItem['Plan Description'].includes('COMMERCIAL') ? currentItem['Monthly Premium'] : dupeArray.length !== 0 ? findPlan('Commercial', false) : ' '), 
-                'Small Biz Monthly Rate': ' ', 
+                'CDLP Monthly Rate': (currentItem['Plan Description'].toLowerCase().includes('commercial') ? currentItem['Monthly Premium'] : dupeArray.length !== 0 ? findPlan('Commercial', false) : ' '), 
+                'Small Biz Monthly Rate': (currentItem['Plan Description'].toLowerCase().includes('business') ? currentItem['Member Number'] : dupeArray.length !== 0 ? findPlan('Buisness', false) : ''), 
                 'Plans Offered/Chosen' : filteredPlanDescription, 
                 'Pay Periods': currentItem['Pay Period'],
                 'Pay Period Amount': currentItem['Pay Period Amount'],
@@ -293,13 +329,18 @@ export default function Home() {
     }
 
   function downloadSheet() {
-    const newWS = XLSX.utils.json_to_sheet(mainSettings.convertedSheet, { header: completedPlanHeaders })
+    const newWS = XLSX.utils.json_to_sheet(mainSettings.convertedSheet, { header: userSettings.excelHeaders })
     const newWB = XLSX.utils.book_new()
     XLSX.utils.book_append_sheet(newWB, newWS, "NewDownload" )
     XLSX.writeFile(newWB, `simpleExcelConvertDownload.xlsx`)
   }
 
 
+    // function checkState() {
+    //     console.log(userSettings)
+    //     console.log(shittyDb)
+    //     console.log(userSettings.excelHeaders)
+    // }
 
   /* Handles Toop Tip Text */
   let toolTipConvert = ''
@@ -307,41 +348,63 @@ export default function Home() {
   if (mainSettings.groupNumber === '') {tempToolTipConvert.push('Group #')} if (mainSettings.company === '') { tempToolTipConvert.push('Company') } if (fieldNoteSheet === 'test2') { tempToolTipConvert.push('Field Note Sheet') }
   toolTipConvert = tempToolTipConvert.join(', ')
 
-  return (
-    <div className={`${isOpen === true ? 'blur-sm': ''}`}>
-    <div className='m-10'>
-      <h1 className='text-6xl text-center'>Simple Excel Conversion</h1>
-    </div>
-
-    <div className='h-full'>
-      <Modal isOpen={isOpen} setIsOpen={setIsOpen} mainSettings={mainSettings}/>
-      <div>
-        <FileImporter defaultMainSettings={defaultMainSettings} mainSettings={mainSettings} setMainSettings={setMainSettings} workbook={workbook} setWorkbook={setWorkbook} fielfieldNoteSheet={fieldNoteSheet} setFieldNoteSheet={setFieldNoteSheet}/>
-
-        <div className='flex flex-row gap-4 mx-5 my-2 justify-evenly' >
-          {mainSettings.sheetName !== '' ?
-              fieldNoteSheet === 'test2' || mainSettings.groupNumber === '' || mainSettings.company === '' ? 
-                  <div data-tooltip={`Missing: ${toolTipConvert}`} >
-                      <button disabled={true} className={` ${buttonStyles} text-[#b23800] pointer-events-none cursor-not-allowed`} onClick={convertSheet}>Convert</button>
-                  </div>
-                  : <button onClick={convertSheet} className={`${buttonStyles}  hover:bg-[#292524]`}>Convert</button>
-              :null
-          }
-          {mainSettings.convertedSheet !== undefined ?
-              !mainSettings.hasStateUpdated ? 
-              <button onClick={downloadSheet} className={`${buttonStyles}`}>Download</button>
-                  :<div data-tooltip={`Something has changed re convert the file`}> <button disabled={true} className={`${buttonStyles} cursor-not-allowed text-[#b23800] pointer-events-none`} >Re Convert</button> </div>
-              :null
-          }
-          {mainSettings.convertedSheet !== undefined?
-              <button onClick={() => setIsOpen(true)} className={`${buttonStyles}`}>Check Log</button>
-              : null
-          }
+    return (
+        <>
+        { userSettings.password === '' ?
+            <div className='grid grid-cols-3 grid-rows-3 items-center justify-center h-screen'>
+                <Modal isOpen={isOpen} setIsOpen={setIsOpen} mainSettings={mainSettings} userSettings={userSettings}/>
+                <form onSubmit={handleSubmit} className='flex flex-col mt-2 self-start row-start-2 col-start-2 '>
+                    <div className=''>
+                        <h1 className='text-5xl text-center '>Enter Password</h1>
+                    </div>
+                    <input
+                        className='bg-[#292524] p-2 px-8 focus:outline-hidden outline-none w-full rounded-sm  text-3xl text-center font-bold'
+                        type='password'
+                        onChange={handlePassInputChange}
+                        value={passInput}
+                    >
+                    </input>
+                   
+                </form>
+                <button onClick={handleSubmit} className={`${buttonStyles}  w-fit justify-self-start self-start ml-2 mt-[3.5rem] col-start-3 row-start-2`}>Submit</button>
+            </div>
+        :
+        <div className={`${isOpen === true ? 'blur-sm': ''}`}>
+        <div className='m-10'>
+          <h1 className='text-6xl text-center'>Simple Excel Conversion</h1>
         </div>
-
-        {/* <button onClick={checkState}>Random Testing</button>  */}
-      </div>
-    </div>
-    </div>
-  );
+    
+        <div className='h-full'>
+          <Modal isOpen={isOpen} setIsOpen={setIsOpen} mainSettings={mainSettings} userSettings={userSettings}/>
+          <div>
+            <FileImporter defaultMainSettings={defaultMainSettings} mainSettings={mainSettings} setMainSettings={setMainSettings} workbook={workbook} setWorkbook={setWorkbook} fielfieldNoteSheet={fieldNoteSheet} setFieldNoteSheet={setFieldNoteSheet} userSettings={userSettings}/>
+    
+            <div className='flex flex-row gap-4 mx-5 my-2 justify-evenly' >
+              {mainSettings.sheetName !== '' ?
+                  fieldNoteSheet === 'test2' || mainSettings.groupNumber === '' || mainSettings.company === '' ? 
+                      <div data-tooltip={`Missing: ${toolTipConvert}`} >
+                          <button disabled={true} className={` ${buttonStyles} text-[#b23800] pointer-events-none cursor-not-allowed text-5xl`} onClick={convertSheet}>Convert</button>
+                      </div>
+                      : <button onClick={convertSheet} className={`${buttonStyles}  hover:bg-[#292524]`}>Convert</button>
+                  :null
+              }
+              {mainSettings.convertedSheet !== undefined ?
+                  !mainSettings.hasStateUpdated ? 
+                  <button onClick={downloadSheet} className={`${buttonStyles}`}>Download</button>
+                      :<div data-tooltip={`Something has changed re convert the file`}> <button disabled={true} className={`${buttonStyles} cursor-not-allowed text-[#b23800] pointer-events-none`} >Re Convert</button> </div>
+                  :null
+              }
+              {mainSettings.convertedSheet !== undefined?
+                  <button onClick={() => setIsOpen(true)} className={`${buttonStyles}`}>Check Log</button>
+                  : null
+              }
+            </div>
+    
+            {/* <button onClick={checkState}>Random Testing</button>  */}
+          </div>
+        </div>
+        </div>    
+        }
+        </>
+    );
 }
