@@ -24,12 +24,14 @@ const defaultMainSettings:object = {
 }
 
 export default function Home() {
+    // Main State for User
     const [mainSettings, setMainSettings]:any = useState(defaultMainSettings);
-    //main sheet from user
-    const [workbook, setWorkbook]:any = useState('test');
-    //field note sheet
-    const [fieldNoteSheet, setFieldNoteSheet]:any = useState('test2');
 
+    // State from User
+    const [workbook, setWorkbook]:any = useState('test');
+
+    // State from Field Notes Sheet
+    const [fieldNoteSheet, setFieldNoteSheet]:any = useState('test2');
 
     /* Handle Modal */
     const [isOpen, setIsOpen] = useState(false)
@@ -37,6 +39,7 @@ export default function Home() {
     /* Handles Password */
     const [passInput, setPassInput] = useState<string>('')
 
+    /* Website check if user has a password */
     const [userSettings, setUserSettings]: any = useState({ 
         password: '', 
         user: '',
@@ -49,17 +52,24 @@ export default function Home() {
 
     function checkPass(inputPass: string) {
         const foundUser = shittyDb.users.find((currentUser) => (inputPass === currentUser.password))
-
         if (foundUser) {
             setUserSettings((prevUserSettings: any) => {
 
                 return ({ // allow access
-                    ...shittyDb[foundUser.user as keyof typeof shittyDb],
+                    ...shittyDb[foundUser.user],
                     password: foundUser.password,
                     user: foundUser.user,
                 })
             })
-            window.localStorage.setItem('tempPass', inputPass)
+            setMainSettings((prevMainSettings: any) => { // should set main settings to be user settings 
+                const tempUser = shittyDb[foundUser.user]
+                console.log(tempUser.userPref.spheresOptionsPref)
+                return {
+                    ...prevMainSettings,
+                    spheres: tempUser.userPref.spheresOptionsPref
+                }
+            })
+            window.localStorage.setItem('tempPass', inputPass) /* MOVE TO DATABASE FUTURE */
         } else {
             setIsOpen(true)
         }
@@ -91,13 +101,13 @@ export default function Home() {
             }
         })
 
-        // Scuffed .map()
+        // .map() for excel sheet ( Just a for loop so it can modify original array while iterating )
         const filterdSheet: any = []
         for (let i = 0; i < objectMainSheet.length; i ++) {
             const currentItem: any = objectMainSheet[i]
             
             //Removes spaces, Phone number logic
-            function removeSpacesAndNumbers(obj: any) { // CHANGE PHONE NUMBER LOGIC - more consistent and less janky
+            function removeSpacesAndNumbers(obj: any) { // FIX THIS TO BE MORE CONSISTENT 
                 Object.keys(obj).forEach(function(key) {
                     if(typeof obj[key] === 'string') { obj[key] = obj[key].replace(/\s+/g,' ').trim() }
                     
@@ -115,6 +125,7 @@ export default function Home() {
                 })
             }
 
+            // Removes spaces from strings
             function nameFixer(currentName: any) {
                 const nameArr = currentName.toLowerCase().split(' ')
                 //remove middle initial
@@ -151,7 +162,13 @@ export default function Home() {
                 const spheresArray = mainSettings.spheres.map((currentItem: any) => currentItem.value)
                 const filteredArr = spheresArray.reduce((r:any, a: any) => r.concat(a, ' | '), [])
                 if (filteredArr[filteredArr.length -1 ] = ' | ') { filteredArr.splice(filteredArr.length - 1, 1) }
-                filteredSpheres = filteredArr.join('')
+               
+                const tempSpheresString = filteredArr.join('')
+
+                if (filteredPlanDescription.toLowerCase().includes("spanish")) {
+                    filteredSpheres = tempSpheresString.replace("English", "Spanish") 
+                } else { filteredSpheres = tempSpheresString }
+
             }
 
             // logic for finding duped plans

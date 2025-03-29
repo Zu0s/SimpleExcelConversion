@@ -51,7 +51,7 @@ export default function Modal(props: { isOpen: boolean, setIsOpen: Function, mai
                   </div>
                   :<h1 className="text-2xl">No Errors Detected</h1>
                   }
-                  <div className="mt-4">
+                  <div className="mt-4 flex justify-center">
                     <Button
                       className={`${buttonStyles} `}
                       onClick={close}

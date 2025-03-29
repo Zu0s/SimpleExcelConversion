@@ -1,13 +1,22 @@
 export const userPasswordBill = 'bbyb1873';
 
 interface UserObject {
+    [key: string]: any,
+    userPref: { 
+        refferalSourcePref: Object[]
+        spheresOptionsPref: Object[]
+    },
     excelHeaders: String[],
     referralSourceOptions: {value: String, label: String, color?: String}[],
     spheresOptions: {value: String, label: String, color?: String}[]
 }
-export const shittyDb:{ users: Array<{ user: string, password: string }>, billButkovich: UserObject, steveRemmels: UserObject } = {
+export const shittyDb:{[index: string]: any, users: Array<{[key: string]: any, user: string, password: string }>, billButkovich: UserObject, steveRemmels: UserObject } = {
     users: [{ user: 'billButkovich', password: 'bbyb1873'}, { user: 'steveRemmels', password: 'tempstevepass'}],
     billButkovich: {
+        userPref: {
+            refferalSourcePref: [],
+            spheresOptionsPref: [{value: 'Employee Benefits', label: 'Employee Benefits', color: '#FF5100'}, {value: 'English', label: 'English', color: '#FF5100'},]
+        },
         excelHeaders: [
             'Legal Plan #',
             'IDShield #',
@@ -99,6 +108,7 @@ export const shittyDb:{ users: Array<{ user: string, password: string }>, billBu
             {value: 'Conservation', label: 'Conservation', color: '#FF5100'},
             {value: 'Construction', label: 'Construction', color: '#FF5100'},
             {value: 'Employee Benefits', label: 'Employee Benefits', color: '#FF5100'},
+            {value: 'English', label: 'English', color: '#FF5100'},
             {value: 'FFL', label: 'FFL', color: '#FF5100'},
             {value: "Finder's Fee", label: "Finder's Fee", color: '#FF5100'},
             {value: 'Fire Group', label: 'Fire Group', color: '#FF5100'},
@@ -124,6 +134,10 @@ export const shittyDb:{ users: Array<{ user: string, password: string }>, billBu
         ]
     },
     steveRemmels: {
+        userPref: {
+            refferalSourcePref: [],
+            spheresOptionsPref: []
+        },
         excelHeaders: [
             'Legal Plan #',
             'IDShield #',
@@ -185,6 +199,7 @@ export const shittyDb:{ users: Array<{ user: string, password: string }>, billBu
     }
 }
 
+/* LOOKS LIKE REMOVE */
 export const completedPlanHeadersBill = [
     'Legal Plan #',
     'IDShield #',

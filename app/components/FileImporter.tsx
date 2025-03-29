@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { shittyDb } from '../keys'
+import { shittyDb, spheresOptions } from '../keys'
 import { buttonStyles } from '../groupedStyles';
 import Select, { StylesConfig } from 'react-select';
 import * as XLSX from 'xlsx';
@@ -77,7 +77,17 @@ export default function FileImporter(props: any) {
     const handleRemoveFile = () => {
         props.setWorkbook('test')
         props.setFieldNoteSheet('test2')
-        return props.setMainSettings(props.defaultMainSettings)
+        return props.setMainSettings(() => {
+            console.log(props.userSettings.userPref)
+            let spheresPref = props.defaultMainSettings.spheres
+            if (props.userSettings.userPref) {
+                spheresPref = props.userSettings.userPref.spheresOptionsPref
+            }
+            return {
+                ...props.defaultMainSettings,
+                spheres: spheresPref
+            }
+        })
     }
 
     /* Select onChange */ 
