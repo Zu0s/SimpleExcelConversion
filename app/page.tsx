@@ -291,7 +291,7 @@ export default function Home() {
                     value: (currentItem['Plan Description'].toLowerCase().includes('business') ? currentItem['Member Number'] : dupeArray.length !== 0 ? findPlan('Buisness', true) : ''),
                     inUse: false
                 },
-                'First Name FAIL HERE': {
+                'First Name': {
                     value: (nameFixer(currentItem['First Name'])), // FORCED ERROR HERE
                     inUse: false
                 },
