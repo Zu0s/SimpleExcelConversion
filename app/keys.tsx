@@ -7,10 +7,12 @@ interface UserObject {
         spheresOptionsPref: Object[]
     },
     excelHeaders: String[],
+    testExcelHeaders: Object
     referralSourceOptions: {value: String, label: String, color?: String}[],
     spheresOptions: {value: String, label: String, color?: String}[]
 }
-export const shittyDb:{[index: string]: any, users: Array<{[key: string]: any, user: string, password: string }>, billButkovich: UserObject, steveRemmels: UserObject } = {
+
+export const shittyDb:{[index: string]: any, users: Array<{[key: string]: any, user: string, password: string }>, billButkovich: UserObject } = {
     users: [{ user: 'billButkovich', password: 'bbyb1873'}, { user: 'steveRemmels', password: 'tempstevepass'}],
     billButkovich: {
         userPref: {
@@ -60,6 +62,49 @@ export const shittyDb:{[index: string]: any, users: Array<{[key: string]: any, u
             'Spheres',
             'Contact Type'
         ],
+        testExcelHeaders: { // this is the modular mapping 
+            'Legal Plan #': 'Legal Plan #',
+            'IDShield #': 'IDShield #',
+            'CDLP #': 'CDLP #',
+            'Small Buisness Plan #': 'Small Buisness Plan #',
+            'First Name (0r) Group Account Name': 'First Name',
+            'Last Name': 'Last Name',
+            'Address': 'Address 1',
+            'Address 2': 'Address 2',
+            'Address 3': 'Address 3',
+            'Country': 'Country',
+            'City': 'City',
+            'State': 'State/Province',
+            'Zip': 'Zip/Postal Code',
+            'Email': 'Email',
+            'Home Phone': 'Home Phone',
+            'Day Phone': 'Day Phone',
+            'Cell Phone': 'Cell Phone',
+            'Birthday': 'Date of Birth',
+            'Annual Premium': 'Annual Premium',
+            'LegalShield Monthly Rate': 'Legal Shield Monthly Rate',
+            'IDShield Monthly Rate': 'IDShield Monthly Rate',
+            'CDLP Monthly Rate': 'CDLP Monthly Rate',
+            'Small Biz Monthly Rate': 'Small Biz Monthly Rate',
+            'Plans Offered/Chosen': 'Plans Offered/Chosen',
+            'Pay Periods': 'Pay Period',
+            'Pay Period Amount': 'Pay Period Amount',
+            'Group Division': 'Group Division',
+            'Employee ID': 'Employee ID',
+            'Production Date': 'Production Date',
+            'Effective Date': 'Effective Date',
+            'Cancel Date': 'Cancel Date',
+            'Last Plan Amount': 'Last Plan Amount Update',
+            'Pre-Cancel': 'Pre-Cancel',
+            'Pending IDT': 'Pending IDT',
+            'Status (pick one)': 'Status',
+            'Referral Source (pick one)': 'Referral Source',
+            'Language': 'Language',
+            'Group # ': 'Group #',
+            'Company': 'Company',
+            'Spheres': 'Spheres',
+            // 'Contact Type': "Don't know what to connect to" // Do I need
+        },
         referralSourceOptions: [
             {value: ' ', label: 'None', color: '#FF5100'}, 
             {value: 'Association Member', label: 'Association Member' , color: '#FF5100'}, 
@@ -133,71 +178,73 @@ export const shittyDb:{[index: string]: any, users: Array<{[key: string]: any, u
             {value: 'Utilities', label: 'Utilities', color: '#FF5100'}
         ]
     },
-    steveRemmels: {
-        userPref: {
-            refferalSourcePref: [],
-            spheresOptionsPref: []
-        },
-        excelHeaders: [
-            'Legal Plan #',
-            'IDShield #',
-            'CDLP #',
-            'Small Buisness Plan #',
-            'First Name (0r) Group Account Name',
-            'Last Name',
-            'Address',
-            'Address 2',
-            'Address 3',
-            'Country',
-            'City',
-            'State',
-            'Zip',
-            'Email',
-            'Home Phone',
-            'Day Phone',
-            'Cell Phone',
-            'Birthday',
-            'Annual Premium',
-            'LegalShield Monthly Rate',
-            'IDShield Monthly Rate',
-            'CDLP Monthly Rate',
-            'Small Biz Monthly Rate',
-            'Plans Offered/Chosen',
-            'Pay Periods',
-            'Pay Period Amount',
-            'Group Division',
-            'Employee ID',
-            'Production Date',
-            'Effective Date',
-            'Cancel Date',
-            'Last Plan Amount',
-            'Pre-Cancel',
-            'Pending IDT',
-            'Status (pick one)',
-            'Referral Source (pick one)',
-            'Language',
-            'Group # ',
-            'Company',
-            'Spheres',
-            'Contact Type'
-        ],
-        referralSourceOptions: [
-            {value: ' ', label: 'None', color: '#FF5100'}, 
-            {value: 'Nothing here 1', label: 'Nothing here 1' , color: '#FF5100'}, 
-            {value: 'Nothing here 2', label: 'Nothing here 2', color: '#FF5100'}, 
-            {value: 'Nothing here 3', label: 'Nothing here 3', color: '#FF5100'}, 
-        ],
-        spheresOptions: [
-            {value: 'Association Member', label: 'Association Member', color: '#FF5100'}, 
-            {value: 'Account', label: 'Account', color: '#FF5100'},
-            {value: 'Aircraft / Aerospace', label: 'Aircraft / Aerospace', color: '#FF5100'},
-            {value: 'Baby here', label: 'WAHHHHHHHHH', color: '#FF5100'},
-            {value: 'Associate - Past', label: 'Associate - Past', color: '#FF5100'},
-            {value: 'Associate Prospects', label: 'Associate Prospects', color: '#FF5100'},
-            {value: 'Association', label: 'Association', color: '#FF5100'},
-        ]
-    }
+
 }
+
+// steveRemmels: {
+//     userPref: {
+//         refferalSourcePref: [],
+//         spheresOptionsPref: []
+//     },
+//     excelHeaders: [
+//         'Legal Plan #',
+//         'IDShield #',
+//         'CDLP #',
+//         'Small Buisness Plan #',
+//         'First Name (0r) Group Account Name',
+//         'Last Name',
+//         'Address',
+//         'Address 2',
+//         'Address 3',
+//         'Country',
+//         'City',
+//         'State',
+//         'Zip',
+//         'Email',
+//         'Home Phone',
+//         'Day Phone',
+//         'Cell Phone',
+//         'Birthday',
+//         'Annual Premium',
+//         'LegalShield Monthly Rate',
+//         'IDShield Monthly Rate',
+//         'CDLP Monthly Rate',
+//         'Small Biz Monthly Rate',
+//         'Plans Offered/Chosen',
+//         'Pay Periods',
+//         'Pay Period Amount',
+//         'Group Division',
+//         'Employee ID',
+//         'Production Date',
+//         'Effective Date',
+//         'Cancel Date',
+//         'Last Plan Amount',
+//         'Pre-Cancel',
+//         'Pending IDT',
+//         'Status (pick one)',
+//         'Referral Source (pick one)',
+//         'Language',
+//         'Group # ',
+//         'Company',
+//         'Spheres',
+//         'Contact Type'
+//     ],
+//     referralSourceOptions: [
+//         {value: ' ', label: 'None', color: '#FF5100'}, 
+//         {value: 'Nothing here 1', label: 'Nothing here 1' , color: '#FF5100'}, 
+//         {value: 'Nothing here 2', label: 'Nothing here 2', color: '#FF5100'}, 
+//         {value: 'Nothing here 3', label: 'Nothing here 3', color: '#FF5100'}, 
+//     ],
+//     spheresOptions: [
+//         {value: 'Association Member', label: 'Association Member', color: '#FF5100'}, 
+//         {value: 'Account', label: 'Account', color: '#FF5100'},
+//         {value: 'Aircraft / Aerospace', label: 'Aircraft / Aerospace', color: '#FF5100'},
+//         {value: 'Baby here', label: 'WAHHHHHHHHH', color: '#FF5100'},
+//         {value: 'Associate - Past', label: 'Associate - Past', color: '#FF5100'},
+//         {value: 'Associate Prospects', label: 'Associate Prospects', color: '#FF5100'},
+//         {value: 'Association', label: 'Association', color: '#FF5100'},
+//     ]
+// }
 
 /* LOOKS LIKE REMOVE */
 export const completedPlanHeadersBill = [

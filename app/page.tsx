@@ -19,6 +19,8 @@ const defaultMainSettings:object = {
   convertedSheet: undefined,
   dupeCounter: 0,
   updateCounter: 0,
+  unusedCollumsLegalShield: [],
+  failedMappings: [],
   exisitingDupesFound: [],
   hasStateUpdated: false
 }
@@ -63,7 +65,6 @@ export default function Home() {
             })
             setMainSettings((prevMainSettings: any) => { // should set main settings to be user settings 
                 const tempUser = shittyDb[foundUser.user]
-                console.log(tempUser.userPref.spheresOptionsPref)
                 return {
                     ...prevMainSettings,
                     spheres: tempUser.userPref.spheresOptionsPref
@@ -271,52 +272,263 @@ export default function Home() {
                 else { return false }
             }
 
+            /* new system for binding the headers to each other */ // fix first anme
+            let dataValues = { 
+                /* Legal Shield Sheet Values */
+                'Legal Plan #': {
+                    value: (currentItem['Plan Description'].toLowerCase().includes('commercial') ? ' ' : currentItem['Plan Description'].toLowerCase().includes('business') ? ' ' : Array.from( currentItem['Member Number'] )[0] === '1' ? currentItem['Member Number'] : dupeArray.length !== 0 ? findPlan('Legal Shield', true) : '' ),
+                    inUse: false
+                },
+                'IDShield #': {
+                    value: (Array.from( currentItem['Member Number'] )[0] === '7' ? currentItem['Member Number']: dupeArray.length !== 0 ? findPlan('IDShield', true) :  ' '),
+                    inUse: false
+                },
+                'CDLP #': {
+                    value: (currentItem['Plan Description'].toLowerCase().includes('commercial') ? currentItem['Member Number'] : dupeArray.length !== 0 ? findPlan('Commercial', true) : ' '),
+                    inUse: false
+                },
+                'Small Buisness Plan #': {
+                    value: (currentItem['Plan Description'].toLowerCase().includes('business') ? currentItem['Member Number'] : dupeArray.length !== 0 ? findPlan('Buisness', true) : ''),
+                    inUse: false
+                },
+                'First Name': {
+                    value: (nameFixer(currentItem['First Name FAIL HERE'])), // FORCED ERROR HERE
+                    inUse: false
+                },
+                'Last Name': {
+                    value: (nameFixer(currentItem['Last Name'])),
+                    inUse: false
+                },
+                'Address 1': {
+                    value: currentItem['Address 1'],
+                    inUse: false
+                },
+                'Address 2': {
+                    value: currentItem['Address 2'],
+                    inUse: false
+                },
+                'Address 3': {
+                    value: currentItem['Address 3'],
+                    inUse: false
+                },
+                'Country': {
+                    value: currentItem['Country'],
+                    inUse: false
+                },
+                'City': {
+                    value: currentItem['City'],
+                    inUse: false
+                },
+                'State/Province': {
+                    value: currentItem['State/Province'],
+                    inUse: false
+                },
+                'Zip/Postal Code': {
+                    value: currentItem['Zip/Postal Code'],
+                    inUse: false
+                },
+                'Email': {
+                    value: currentItem['Email'].toLowerCase(),
+                    inUse: false
+                },
+                'Home Phone': {
+                    value: currentItem['Home Phone'],
+                    inUse: false
+                },
+                'Day Phone': {
+                    value: currentItem['Day Phone'],
+                    inUse: false
+                },
+                'Cell Phone': {
+                    value: currentItem['Cell Phone'],
+                    inUse: false
+                },
+                'Annual Premium': {
+                    value: currentItem['Annual Premium'],
+                    inUse: false
+                },
+                'Date of Birth': {
+                    value: (currentItem['Date of Birth']),
+                    inUse: false
+                },
+                'Legal Shield Monthly Rate': {
+                    value: (currentItem['Plan Description'].toLowerCase().includes('commercial') ? ' ' : currentItem['Plan Description'].toLowerCase().includes('business') ? ' ' : Array.from( currentItem['Member Number'] )[0] === '1' ? currentItem['Monthly Premium'] : dupeArray.length !== 0 ? findPlan('Legal Shield', false) : ''  ),
+                    inUse: false
+                },
+                'IDShield Monthly Rate': {
+                    value: (Array.from( currentItem['Member Number'] )[0] === '7' ? currentItem['Monthly Premium'] : dupeArray.length !== 0 ? findPlan('IDShield', false) : ' '),
+                    inUse: false
+                },
+                'CDLP Monthly Rate': {
+                    value: (currentItem['Plan Description'].toLowerCase().includes('commercial') ? currentItem['Monthly Premium'] : dupeArray.length !== 0 ? findPlan('Commercial', false) : ' '),
+                    inUse: false
+                },
+                'Small Biz Monthly Rate': {
+                    value: (currentItem['Plan Description'].toLowerCase().includes('business') ? currentItem['Member Number'] : dupeArray.length !== 0 ? findPlan('Buisness', false) : ''),
+                    inUse: false
+                },
+                'Plans Offered/Chosen': {
+                    value: filteredPlanDescription,
+                    inUse: false
+                },
+                'Pay Period': {
+                    value: currentItem['Pay Period'],
+                    inUse: false
+                },
+                'Pay Period Amount': {
+                    value: currentItem['Pay Period Amount'],
+                    inUse: false
+                },
+                'Group Division': {
+                    value: currentItem['Group Division'],
+                    inUse: false
+                },
+                'Employee ID': {
+                    value: currentItem['Employee ID'],
+                    inUse: false
+                },
+                'Production Date': {
+                    value: (currentItem['Production Date']),
+                    inUse: false
+                },
+                'Effective Date': {
+                    value: (currentItem['Effective Date']),
+                    inUse: false
+                },
+                'Cancel Date': {
+                    value: (currentItem['Cancel Date']),
+                    inUse: false
+                },
+                'Last Plan Amount Update': {
+                    value: (currentItem['Last Plan Amount Update']),
+                    inUse: false
+                },
+                'Pre-Cancel': {
+                    value: currentItem['Pre-Cancel'],
+                    inUse: false
+                },
+                'Pending IDT': {
+                    value: currentItem['Pending IDT'],
+                    inUse: false
+                },
+                'Status': {
+                    value: currentItem['Status'],
+                    inUse: false
+                },
+                /* Extra Values From Inputs */
+                'Referral Source': {
+                    value: mainSettings.refferalSource.value,
+                    inUse: false
+                },
+                'Language': {
+                    value: (filteredPlanDescription.toLowerCase().includes('spanish')? 'Spanish' : mainSettings.language.value),
+                    inUse: false
+                },
+                'Group #': {
+                    value: mainSettings.groupNumber,
+                    inUse: false
+                },
+                'Company': {
+                    value: mainSettings.company,
+                    inUse: false
+                },
+                'Spheres': {
+                    value: filteredSpheres,
+                    inUse: false
+                }
+            }
+
+            let currentUserObject = {
+                /* handle and add update data on intialize */
+                ...(handleUpdate() && existingContacts[0])
+            }
+            /*
+                - on below function if doesn't have a correct key. return error and FORCE modal open
+                - how to display collums not currently being used 
+            */
+
+            const failedMappings: any = []
+            Object.keys(userSettings.testExcelHeaders).forEach(function(key: any) { // loop through user settings
+                /* Loop and on each key add each key to above object */ // ADD ERROR DETECTION HERE
+                if(!dataValues[userSettings.testExcelHeaders[key] as keyof typeof dataValues]) {
+                    failedMappings.push(`${key} - ${userSettings.testExcelHeaders[key]}`)
+                }
+                
+                dataValues = { // declare a variable is being used
+                    ...dataValues,
+                    [userSettings.testExcelHeaders[key] as keyof typeof dataValues]: { 
+                        ...dataValues[userSettings.testExcelHeaders[key] as keyof typeof dataValues],
+                        inUse: true
+                    }
+                }
+                currentUserObject = {
+                    ...currentUserObject,
+                    [key]: dataValues[userSettings.testExcelHeaders[key] as keyof typeof dataValues].value
+                }
+            })
+            setMainSettings((prevMainSettings: any) => { // this WORKS!!!!
+                const unusedKeysArr: any = []
+                Object.keys(dataValues).forEach(function(currentDataValueKey: any) {
+                    if (!dataValues[currentDataValueKey as keyof typeof dataValues].inUse) {
+                        unusedKeysArr.push(currentDataValueKey)
+                    }
+                })
+
+                return {
+                    ...prevMainSettings,
+                    unusedCollumsLegalShield: unusedKeysArr,
+                    failedMappings: failedMappings
+                }
+            })
+            
+            filterdSheet.push(currentUserObject)
+            // console.log(mainSettings.unusedCollumsLegalShield)
 
             /* New JSON Object */
-            filterdSheet.push({
-                ...(handleUpdate() && existingContacts[0]),
-                'Legal Plan #': (currentItem['Plan Description'].toLowerCase().includes('commercial') ? ' ' : currentItem['Plan Description'].toLowerCase().includes('business') ? ' ' : Array.from( currentItem['Member Number'] )[0] === '1' ? currentItem['Member Number'] : dupeArray.length !== 0 ? findPlan('Legal Shield', true) : '' ), 
-                'IDShield #': (Array.from( currentItem['Member Number'] )[0] === '7' ? currentItem['Member Number']: dupeArray.length !== 0 ? findPlan('IDShield', true) :  ' '), 
-                'CDLP #': (currentItem['Plan Description'].toLowerCase().includes('commercial') ? currentItem['Member Number'] : dupeArray.length !== 0 ? findPlan('Commercial', true) : ' '), 
-                'Small Buisness Plan #': (currentItem['Plan Description'].toLowerCase().includes('business') ? currentItem['Member Number'] : dupeArray.length !== 0 ? findPlan('Buisness', true) : ''), 
-                'First Name (0r) Group Account Name': (nameFixer(currentItem['First Name'])),
-                'Last Name': (nameFixer(currentItem['Last Name'])),
-                'Address': currentItem['Address 1'],
-                'Address 2': currentItem['Address 2'],
-                'Address 3': currentItem['Address 3'],
-                'Country': currentItem['Country'],
-                'City': currentItem['City'],
-                'State': currentItem['State/Province'],
-                'Zip': currentItem['Zip/Postal Code'],
-                'Email': currentItem['Email'].toLowerCase(),
-                'Home Phone': currentItem['Home Phone'],
-                'Day Phone': currentItem['Day Phone'],
-                'Cell Phone': currentItem['Cell Phone'] ,
-                'Birthday': (currentItem['Date of Birth']), 
-                'Annual Premium': currentItem['Annual Premium'],
-                'LegalShield Monthly Rate': (currentItem['Plan Description'].toLowerCase().includes('commercial') ? ' ' : currentItem['Plan Description'].toLowerCase().includes('business') ? ' ' : Array.from( currentItem['Member Number'] )[0] === '1' ? currentItem['Monthly Premium'] : dupeArray.length !== 0 ? findPlan('Legal Shield', false) : ''  ), 
-                'IDShield Monthly Rate': (Array.from( currentItem['Member Number'] )[0] === '7' ? currentItem['Monthly Premium'] : dupeArray.length !== 0 ? findPlan('IDShield', false) : ' '), 
-                'CDLP Monthly Rate': (currentItem['Plan Description'].toLowerCase().includes('commercial') ? currentItem['Monthly Premium'] : dupeArray.length !== 0 ? findPlan('Commercial', false) : ' '), 
-                'Small Biz Monthly Rate': (currentItem['Plan Description'].toLowerCase().includes('business') ? currentItem['Member Number'] : dupeArray.length !== 0 ? findPlan('Buisness', false) : ''), 
-                'Plans Offered/Chosen' : filteredPlanDescription, 
-                'Pay Periods': currentItem['Pay Period'],
-                'Pay Period Amount': currentItem['Pay Period Amount'],
-                'Group Division': currentItem['Group Division'],
-                'Employee ID': currentItem['Employee ID'],
-                'Production Date': (currentItem['Production Date']),
-                'Effective Date': (currentItem['Effective Date']),
-                'Cancel Date': (currentItem['Cancel Date']),
-                'Last Plan Amount': (currentItem['Last Plan Amount Update']),
-                'Pre-Cancel': currentItem['Pre-Cancel'],
-                'Pending IDT': currentItem['Pending IDT'],
-                'Status (pick one)': currentItem['Status'],
-                'Referral Source (pick one)': mainSettings.refferalSource.value, 
-                'Language': (filteredPlanDescription.toLowerCase().includes('spanish')? 'Spanish' : mainSettings.language.value), 
-                'Group # ': mainSettings.groupNumber,
-                'Company': mainSettings.company, 
-                'Spheres': filteredSpheres, 
-                'Contact Type': ' ' /* CHECK WITH Dad: CONFUSED */
-            })
+            // filterdSheet.push({
+            //     ...(handleUpdate() && existingContacts[0]),
+            //     'Legal Plan #': (currentItem['Plan Description'].toLowerCase().includes('commercial') ? ' ' : currentItem['Plan Description'].toLowerCase().includes('business') ? ' ' : Array.from( currentItem['Member Number'] )[0] === '1' ? currentItem['Member Number'] : dupeArray.length !== 0 ? findPlan('Legal Shield', true) : '' ), 
+            //     'IDShield #': (Array.from( currentItem['Member Number'] )[0] === '7' ? currentItem['Member Number']: dupeArray.length !== 0 ? findPlan('IDShield', true) :  ' '), 
+            //     'CDLP #': (currentItem['Plan Description'].toLowerCase().includes('commercial') ? currentItem['Member Number'] : dupeArray.length !== 0 ? findPlan('Commercial', true) : ' '), 
+            //     'Small Buisness Plan #': (currentItem['Plan Description'].toLowerCase().includes('business') ? currentItem['Member Number'] : dupeArray.length !== 0 ? findPlan('Buisness', true) : ''), 
+            //     'First Name (0r) Group Account Name': (nameFixer(currentItem['First Name'])),
+            //     'Last Name': (nameFixer(currentItem['Last Name'])),
+            //     'Address': currentItem['Address 1'],
+            //     'Address 2': currentItem['Address 2'],
+            //     'Address 3': currentItem['Address 3'],
+            //     'Country': currentItem['Country'],
+            //     'City': currentItem['City'],
+            //     'State': currentItem['State/Province'],
+            //     'Zip': currentItem['Zip/Postal Code'],
+            //     'Email': currentItem['Email'].toLowerCase(),
+            //     'Home Phone': currentItem['Home Phone'],
+            //     'Day Phone': currentItem['Day Phone'],
+            //     'Cell Phone': currentItem['Cell Phone'] ,
+            //     'Birthday': (currentItem['Date of Birth']), 
+            //     'Annual Premium': currentItem['Annual Premium'],
+            //     'LegalShield Monthly Rate': (currentItem['Plan Description'].toLowerCase().includes('commercial') ? ' ' : currentItem['Plan Description'].toLowerCase().includes('business') ? ' ' : Array.from( currentItem['Member Number'] )[0] === '1' ? currentItem['Monthly Premium'] : dupeArray.length !== 0 ? findPlan('Legal Shield', false) : ''  ), 
+            //     'IDShield Monthly Rate': (Array.from( currentItem['Member Number'] )[0] === '7' ? currentItem['Monthly Premium'] : dupeArray.length !== 0 ? findPlan('IDShield', false) : ' '), 
+            //     'CDLP Monthly Rate': (currentItem['Plan Description'].toLowerCase().includes('commercial') ? currentItem['Monthly Premium'] : dupeArray.length !== 0 ? findPlan('Commercial', false) : ' '), 
+            //     'Small Biz Monthly Rate': (currentItem['Plan Description'].toLowerCase().includes('business') ? currentItem['Member Number'] : dupeArray.length !== 0 ? findPlan('Buisness', false) : ''), 
+            //     'Plans Offered/Chosen' : filteredPlanDescription, 
+            //     'Pay Periods': currentItem['Pay Period'],
+            //     'Pay Period Amount': currentItem['Pay Period Amount'],
+            //     'Group Division': currentItem['Group Division'],
+            //     'Employee ID': currentItem['Employee ID'],
+            //     'Production Date': (currentItem['Production Date']),
+            //     'Effective Date': (currentItem['Effective Date']),
+            //     'Cancel Date': (currentItem['Cancel Date']),
+            //     'Last Plan Amount': (currentItem['Last Plan Amount Update']),
+            //     'Pre-Cancel': currentItem['Pre-Cancel'],
+            //     'Pending IDT': currentItem['Pending IDT'],
+            //     'Status (pick one)': currentItem['Status'],
+            //     'Referral Source (pick one)': mainSettings.refferalSource.value, 
+            //     'Language': (filteredPlanDescription.toLowerCase().includes('spanish')? 'Spanish' : mainSettings.language.value), 
+            //     'Group # ': mainSettings.groupNumber,
+            //     'Company': mainSettings.company, 
+            //     'Spheres': filteredSpheres, 
+            //     'Contact Type': ' ' /* CHECK WITH Dad: CONFUSED */
+            // })
 
             /* remove next item if duplicate detected */
             if (dupeArray.length !== 0 ) { for (let spliceI = 0; spliceI < dupeArray.length; spliceI++) {
@@ -326,7 +538,7 @@ export default function Home() {
         /* Move sheet to state*/
         setMainSettings((prevMainSettings:any) => {
             console.log(prevMainSettings.exisitingDupesFound)
-            if (prevMainSettings.exisitingDupesFound.length > 0) {
+            if (prevMainSettings.exisitingDupesFound.length > 0 || prevMainSettings.failedMappings.length > 0) {
                 console.log('if ran')
                 setIsOpen(true)
             }
@@ -346,7 +558,8 @@ export default function Home() {
     }
 
   function downloadSheet() {
-    const newWS = XLSX.utils.json_to_sheet(mainSettings.convertedSheet, { header: userSettings.excelHeaders })
+    const sheetHeaders = Object.keys(userSettings.testExcelHeaders).map((key: any) => key)
+    const newWS = XLSX.utils.json_to_sheet(mainSettings.convertedSheet, { header: sheetHeaders })
     const newWB = XLSX.utils.book_new()
     XLSX.utils.book_append_sheet(newWB, newWS, "NewDownload" )
     XLSX.writeFile(newWB, `simpleExcelConvertDownload.xlsx`)
