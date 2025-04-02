@@ -39,7 +39,6 @@ export default function FileImporter(props: any) {
             const newWb = XLSX.read(data, {dense: true})
             props.setFieldNoteSheet(newWb)
 
-
             props.setMainSettings((prevState: any) => {
                 return {
                     ...prevState,
@@ -109,6 +108,17 @@ export default function FileImporter(props: any) {
           hasStateUpdated: true,
           [name]: value
         }))
+    }
+
+    // Check box function
+    function handleNewGroup(e: any) { // cant trigger state update 
+        const {checked} = e.target
+        props.setMainSettings((prevSettings: any) => ({
+            ...prevSettings,
+            hasStateUpdated: true,
+            newGroup: checked,
+        }))
+   
     }
 
     /* Select Styles */
@@ -228,22 +238,24 @@ export default function FileImporter(props: any) {
                     </>
             }
             <div className='grid grid-cols-2 gap-3 mt-8 border-t-2 border-[#706E6C] pt-5'>
-                <label className={`${props.mainSettings.sheetName === '' ? `${buttonStyles} text-xl w-fit justify-self-center`  : 'text-3xl'} self-center cursor-pointer`} htmlFor='file-importer--input'>{` ${props.mainSettings.sheetName === '' ? "Select Legal Shield Files"  : props.mainSettings.sheetName} `}</label>
-                <input
-                    className={`${isDragging === true ? 'allowChildDragging' : ''} `}
-                    id='file-importer--input'
-                    type='file'
-                    accept=''
-                    onChange={handleMainFileChange}
-                >
-                </input>
-
+                <div className='justify-self-center self-center mt-2'>
+                    <label className={`${props.mainSettings.sheetName === '' ? `${buttonStyles} text-xl w-fit`  : 'text-3xl'} self-center cursor-pointer align-middle`} htmlFor='file-importer--input'>{` ${props.mainSettings.sheetName === '' ? "Select Legal Shield Files"  : props.mainSettings.sheetName} `}</label>
+                    <input
+                        className={` `}
+                        id='file-importer--input'
+                        type='file'
+                        accept=''
+                        onChange={handleMainFileChange}
+                    >
+                    </input>
+                </div>
                 {props.mainSettings.sheetName !== '' || props.mainSettings.fieldNoteSheetName !== '' ?
                     <button className={`${buttonStyles} text-3xl w-fit self-center row-span-2 self-center justify-self-center`} onClick={handleRemoveFile}>Remove</button>
                     : undefined
                 }
 
-                <label className={`${props.mainSettings.fieldNoteSheetName === '' ? `${buttonStyles} text-xl w-fit justify-self-center`  : 'text-3xl'} self-center cursor-pointer`}  htmlFor='fieldNote-importer'>{` ${props.mainSettings.fieldNoteSheetName === '' ? "Select Field Note File"  : props.mainSettings.fieldNoteSheetName} `}</label>
+                <div className='justify-self-center self-center mt-2 '>
+                <label className={`${props.mainSettings.fieldNoteSheetName === '' ? `${buttonStyles} text-xl w-fit`  : 'text-3xl'} ${props.mainSettings.newGroup ? 'pointer-events-none text-[#b23800]' : ''} cursor-pointer align-middle`}  htmlFor='fieldNote-importer'>{` ${props.mainSettings.fieldNoteSheetName === '' ? "Select Field Note File"  : props.mainSettings.fieldNoteSheetName} `}</label>
                 <input
                     className='file-picker'
                     id='fieldNote-importer'
@@ -252,6 +264,22 @@ export default function FileImporter(props: any) {
                     onChange={handleFieldNoteFileChange}
                 >
                 </input>
+                { props.mainSettings.sheetName !== '' && props.mainSettings.fieldNoteSheetName === '' ? 
+                    <>
+                        <input
+                        className='ml-3 self-center justify-self-center align-middle'
+                        id='newGroupCheck'
+                        name='newGroupCheck'
+                        type='checkbox'
+                        checked={props.mainSettings.newGroup}
+                        onChange={handleNewGroup}
+                        ></input>
+                        <label className='ml-1 text-xl align-middle'>New Group</label>
+                    </>
+                    : undefined
+                }
+                
+                </div>
             </div>
             
         </div>

@@ -11,11 +11,12 @@ import * as XLSX from 'xlsx'
 const defaultMainSettings:object = {
   sheetName: '',
   fieldNoteSheetName: '',
-  language: { value: 'English', label: 'English' }, // select - single
-  groupNumber: '', // text
-  company: '', // text
-  spheres: [], // select - multiple
-  refferalSource: '', // select - single
+  newGroup: false,
+  language: { value: 'English', label: 'English' },
+  groupNumber: '', 
+  company: '', 
+  spheres: [], 
+  refferalSource: '', 
   convertedSheet: undefined,
   dupeCounter: 0,
   updateCounter: 0,
@@ -93,7 +94,7 @@ export default function Home() {
     function convertSheet() {
         // turn original sheet into Object
         const objectMainSheet: any = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]] , {raw: false})
-        const fieldNoteMainSheet: any = XLSX.utils.sheet_to_json(fieldNoteSheet.Sheets[fieldNoteSheet.SheetNames[0]], {raw: false})
+        const fieldNoteMainSheet: any = mainSettings.newGroup ? [] : XLSX.utils.sheet_to_json(fieldNoteSheet.Sheets[fieldNoteSheet.SheetNames[0]], {raw: false})
         let dupeCounter = 0; let updateCounter = 0;
         setMainSettings((prevMainSetings: any) => {
             return {
@@ -575,7 +576,7 @@ export default function Home() {
   /* Handles Toop Tip Text */
   let toolTipConvert = ''
   const tempToolTipConvert = []
-  if (mainSettings.groupNumber === '') {tempToolTipConvert.push('Group #')} if (mainSettings.company === '') { tempToolTipConvert.push('Company') } if (fieldNoteSheet === 'test2') { tempToolTipConvert.push('Field Note Sheet') }
+  if (mainSettings.groupNumber === '') {tempToolTipConvert.push('Group #')} if (mainSettings.company === '') { tempToolTipConvert.push('Company') } if (!mainSettings.newGroup) { if (fieldNoteSheet === 'test2'){tempToolTipConvert.push('Field Note Sheet')} }
   toolTipConvert = tempToolTipConvert.join(', ')
 
     return (
@@ -611,9 +612,9 @@ export default function Home() {
     
             <div className='flex flex-row gap-4 mx-5 my-2 justify-evenly' >
               {mainSettings.sheetName !== '' ?
-                  fieldNoteSheet === 'test2' || mainSettings.groupNumber === '' || mainSettings.company === '' ? 
+                    tempToolTipConvert.length > 0 ? 
                       <div data-tooltip={`Missing: ${toolTipConvert}`} >
-                          <button disabled={true} className={` ${buttonStyles} text-[#b23800] pointer-events-none cursor-not-allowed text-5xl`} onClick={convertSheet}>Convert</button>
+                          <button disabled={true} className={` ${buttonStyles} text-[#b23800] pointer-events-none cursor-not-allowed`} onClick={convertSheet}>Convert</button>
                       </div>
                       : <button onClick={convertSheet} className={`${buttonStyles}  hover:bg-[#292524]`}>Convert</button>
                   :null
