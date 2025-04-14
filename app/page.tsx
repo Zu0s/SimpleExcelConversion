@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Modal from './components/Modal';
 import FileImporter from './components/FileImporter';
-import { referralSourceOptions, shittyDb, spheresOptions } from './keys';
+import { shittyDb } from './keys';
 import { buttonStyles } from './groupedStyles';
 
 import * as XLSX from 'xlsx'
@@ -449,22 +449,22 @@ export default function Home() {
             */
 
             const failedMappings: any = []
-            Object.keys(userSettings.testExcelHeaders).forEach(function(key: any) { // loop through user settings
+            Object.keys(userSettings.excelHeaders).forEach(function(key: any) { // loop through user settings
                 /* Loop and on each key add each key to above object */ // ADD ERROR DETECTION HERE
-                if(!dataValues[userSettings.testExcelHeaders[key] as keyof typeof dataValues]) {
-                    failedMappings.push(`${key} - ${userSettings.testExcelHeaders[key]}`)
+                if(!dataValues[userSettings.excelHeaders[key] as keyof typeof dataValues]) {
+                    failedMappings.push(`${key} - ${userSettings.excelHeaders[key]}`)
                 }
                 
                 dataValues = { // declare a variable is being used
                     ...dataValues,
-                    [userSettings.testExcelHeaders[key] as keyof typeof dataValues]: { 
-                        ...dataValues[userSettings.testExcelHeaders[key] as keyof typeof dataValues],
+                    [userSettings.excelHeaders[key] as keyof typeof dataValues]: { 
+                        ...dataValues[userSettings.excelHeaders[key] as keyof typeof dataValues],
                         inUse: true
                     }
                 }
                 currentUserObject = {
                     ...currentUserObject,
-                    [key]: dataValues[userSettings.testExcelHeaders[key] as keyof typeof dataValues].value
+                    [key]: dataValues[userSettings.excelHeaders[key] as keyof typeof dataValues].value
                 }
             })
             setMainSettings((prevMainSettings: any) => { // this WORKS!!!!
@@ -559,7 +559,7 @@ export default function Home() {
     }
 
   function downloadSheet() {
-    const sheetHeaders = Object.keys(userSettings.testExcelHeaders).map((key: any) => key)
+    const sheetHeaders = Object.keys(userSettings.excelHeaders).map((key: any) => key)
     const newWS = XLSX.utils.json_to_sheet(mainSettings.convertedSheet, { header: sheetHeaders })
     const newWB = XLSX.utils.book_new()
     XLSX.utils.book_append_sheet(newWB, newWS, "NewDownload" )
@@ -602,7 +602,7 @@ export default function Home() {
         :
         <div className={`${isOpen === true ? 'blur-sm': ''}`}>
         <div className='m-10'>
-          <h1 className='text-6xl text-center'>Simple Excel Conversion</h1>
+          <h1 className='text-6xl text-center'>Simple Upload Conversion</h1>
         </div>
     
         <div className='h-full'>

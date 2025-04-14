@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { shittyDb, spheresOptions } from '../keys'
+import { shittyDb } from '../keys'
 import { buttonStyles } from '../groupedStyles';
 import Select, { StylesConfig } from 'react-select';
 import * as XLSX from 'xlsx';

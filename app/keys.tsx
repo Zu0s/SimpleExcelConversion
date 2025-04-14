@@ -6,8 +6,7 @@ interface UserObject {
         refferalSourcePref: Object[]
         spheresOptionsPref: Object[]
     },
-    excelHeaders: String[],
-    testExcelHeaders: Object
+    excelHeaders: Object,
     referralSourceOptions: {value: String, label: String, color?: String}[],
     spheresOptions: {value: String, label: String, color?: String}[]
 }
@@ -19,50 +18,7 @@ export const shittyDb:{[index: string]: any, users: Array<{[key: string]: any, u
             refferalSourcePref: [],
             spheresOptionsPref: [{value: 'Employee Benefits', label: 'Employee Benefits', color: '#FF5100'}, {value: 'English', label: 'English', color: '#FF5100'},]
         },
-        excelHeaders: [
-            'Legal Plan #',
-            'IDShield #',
-            'CDLP #',
-            'Small Buisness Plan #',
-            'First Name (0r) Group Account Name',
-            'Last Name',
-            'Address',
-            'Address 2',
-            'Address 3',
-            'Country',
-            'City',
-            'State',
-            'Zip',
-            'Email',
-            'Home Phone',
-            'Day Phone',
-            'Cell Phone',
-            'Birthday',
-            'Annual Premium',
-            'LegalShield Monthly Rate',
-            'IDShield Monthly Rate',
-            'CDLP Monthly Rate',
-            'Small Biz Monthly Rate',
-            'Plans Offered/Chosen',
-            'Pay Periods',
-            'Pay Period Amount',
-            'Group Division',
-            'Employee ID',
-            'Production Date',
-            'Effective Date',
-            'Cancel Date',
-            'Last Plan Amount',
-            'Pre-Cancel',
-            'Pending IDT',
-            'Status (pick one)',
-            'Referral Source (pick one)',
-            'Language',
-            'Group # ',
-            'Company',
-            'Spheres',
-            'Contact Type'
-        ],
-        testExcelHeaders: { // this is the modular mapping 
+        excelHeaders: { // this is the modular mapping 
             'Legal Plan #': 'Legal Plan #',
             'IDShield #': 'IDShield #',
             'CDLP #': 'CDLP #',
@@ -180,8 +136,11 @@ export const shittyDb:{[index: string]: any, users: Array<{[key: string]: any, u
     },
 
 }
+/* Template */
 
-// steveRemmels: {
+// { user: 'user', password: 'userPass'}
+
+// user: {
 //     userPref: {
 //         refferalSourcePref: [],
 //         spheresOptionsPref: []
@@ -247,121 +206,6 @@ export const shittyDb:{[index: string]: any, users: Array<{[key: string]: any, u
 // }
 
 /* LOOKS LIKE REMOVE */
-export const completedPlanHeadersBill = [
-    'Legal Plan #',
-    'IDShield #',
-    'CDLP #',
-    'Small Buisness Plan #',
-    'First Name (0r) Group Account Name',
-    'Last Name',
-    'Address',
-    'Address 2',
-    'Address 3',
-    'Country',
-    'City',
-    'State',
-    'Zip',
-    'Email',
-    'Home Phone',
-    'Day Phone',
-    'Cell Phone',
-    'Birthday',
-    'Annual Premium',
-    'LegalShield Monthly Rate',
-    'IDShield Monthly Rate',
-    'CDLP Monthly Rate',
-    'Small Biz Monthly Rate',
-    'Plans Offered/Chosen',
-    'Pay Periods',
-    'Pay Period Amount',
-    'Group Division',
-    'Employee ID',
-    'Production Date',
-    'Effective Date',
-    'Cancel Date',
-    'Last Plan Amount',
-    'Pre-Cancel',
-    'Pending IDT',
-    'Status (pick one)',
-    'Referral Source (pick one)',
-    'Language',
-    'Group # ',
-    'Company',
-    'Spheres',
-    'Contact Type'
-]
 
-export const referralSourceOptions = [
-    {value: ' ', label: 'None', color: '#FF5100'}, 
-    {value: 'Association Member', label: 'Association Member' , color: '#FF5100'}, 
-    {value: 'Association Referral', label: 'Association Referral', color: '#FF5100'}, 
-    {value: 'Broker Referral', label: 'Broker Referral', color: '#FF5100'}, 
-    {value: 'Broker Referral - A & H', label : 'Broker Referral - A & H' , color: '#FF5100'}, 
-    {value: 'Insurance', label : 'Insurance', color: '#FF5100' },
-    {value: 'Broker Referral - Barthuli Ins', label : 'Broker Referral - Barthuli Ins', color: '#FF5100' },
-    {value: 'Group', label : 'Group', color: '#FF5100' },
-    {value: 'Broker Referral - Chimienti & Assoc.', label : 'Broker Referral - Chimienti & Assoc.', color: '#FF5100' },
-    {value: 'Broker Referral - Coast Benefits', label : 'Broker Referral - Coast Benefits' , color: '#FF5100'},
-    {value: 'Broker Referral - PBT Benefits', label : 'Broker Referral - PBT Benefits', color: '#FF5100' }, // question is this combined with CHP
-    {value: 'CHP', label : 'CHP', color: '#FF5100' },
-    {value: 'Cold Call', label : 'Cold Call', color: '#FF5100' },
-    {value: 'Conservation', label : 'Conservation' , color: '#FF5100'},
-    {value: 'Current Group', label : 'Current Group', color: '#FF5100' },
-    {value: "Dave's Group", label : "Dave's Group", color: '#FF5100' },
-    {value: 'Drive By / Walk-In', label : 'Drive By / Walk-In', color: '#FF5100' },
-    {value: 'FFL Referral', label : 'FFL Referral', color: '#FF5100' },
-    {value: 'Friends and Family', label : 'Friends and Family' , color: '#FF5100'},
-    {value: 'Google Ads', label : 'Google Ads', color: '#FF5100' },
-    {value: 'Indian Health Clinics', label : 'Indian Health Clinics', color: '#FF5100' },
-    {value: 'LinkedIn', label : 'LinkedIn' , color: '#FF5100'},
-    {value: 'Networking Event', label : 'Networking Event' , color: '#FF5100'},
-    {value: 'Partnership - Abe A.', label : 'Partnership - Abe A.' , color: '#FF5100'},
-    {value: 'Partnership - Dave P.', label : 'Partnership - Dave P.' , color: '#FF5100'},
-    {value: 'Partnership - Phil S.', label : 'Partnership - Phil S.', color: '#FF5100'},
-    {value: 'Personal Friend/Business Referral', label: 'Personal Friend/Business Referral', color: '#FF5100'}
-]
-
-export const spheresOptions = [
-    {value: 'Association Member', label: 'Association Member'}, 
-    {value: 'Account', label: 'Account'},
-    {value: 'Aircraft / Aerospace', label: 'Aircraft / Aerospace'},
-    {value: 'Ambulance', label: 'Ambulance'},
-    {value: 'Associate - Past', label: 'Associate - Past'},
-    {value: 'Associate Prospects', label: 'Associate Prospects'},
-    {value: 'Association', label: 'Association'},
-    {value: 'Association Account', label: 'Association Account'},
-    {value: 'Attorneys', label: 'Attorneys'},
-    {value: 'Automotive', label: 'Automotive'},
-    {value: 'Broker', label: 'Broker'},
-    {value: 'Business Owner', label: 'Business Owner'},
-    {value: 'Business Partner', label: 'Business Partner'},
-    {value: 'Canceled', label: 'Canceled'},
-    {value: 'CHP Group', label: 'CHP Group'},
-    {value: 'Conservation', label: 'Conservation'},
-    {value: 'Construction', label: 'Construction'},
-    {value: 'Employee Benefits', label: 'Employee Benefits'},
-    {value: 'FFL', label: 'FFL'},
-    {value: "Finder's Fee", label: "Finder's Fee"},
-    {value: 'Fire Group', label: 'Fire Group'},
-    {value: 'Friends & Family', label: 'Friends & Family'},
-    {value: 'Government Agency', label: 'Government Agency'},
-    {value: 'Group', label: 'Group'},
-    {value: 'Id', label: 'Id'},
-    {value: 'Insurance', label: 'Insurance'},
-    {value: 'Insurance Agents', label: 'Insurance Agents'},
-    {value: 'Manufacturing', label: 'Manufacturing'},
-    {value: 'Medical Field', label: 'Medical Field'},
-    {value: 'Network', label: 'Network'},
-    {value: 'Police', label: 'Police'},
-    {value: 'Professional Sellers', label: 'Professional Sellers'},
-    {value: 'Prospect', label: 'Prospect'},
-    {value: 'SAS', label: 'SAS'},
-    {value: 'Schools / Education', label: 'Schools / Education'},
-    {value: 'Services', label: 'Services'},
-    {value: 'Small Business', label: 'Small Business'},
-    {value: 'Spanish', label: 'Spanish'},
-    {value: 'Tech', label: 'Tech'},
-    {value: 'Utilities', label: 'Utilities'}
-]
 
 export const userPasswordSteveRemmels = 'tempBitchPass'
