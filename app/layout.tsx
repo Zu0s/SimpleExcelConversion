@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Simple Excel Conversion",
-  description: "Simple Excel Conversion App",
+  title: "Simple Upload Conversion",
+  description: "Simple Upload Conversion App",
 };
 
 export default function RootLayout({
