@@ -115,9 +115,9 @@ export default function Home() {
                     
                     const skippedValues = new Set (['Home Phone', 'Day Phone', 'Cell Phone'])
                     if (skippedValues.has(key)) { 
-                        if(obj[key] === '(000) 000-0000') { obj[key] = ' ' }
+                        if(obj[key] === '(000) 000-0000') { obj[key] = '' }
                         else {
-                            obj[key] = obj[key].replace('(', '').replace(')', '').replace('-', ' ')
+                            obj[key] = obj[key].replace('(', '').replace(')', '').replace('-', '')
                         }
                         /* check for extensions too potentiall?? */
                         // 10 digit number code created - EASIER TO CHANGE BASE FROM 10 DIGITS
@@ -175,7 +175,7 @@ export default function Home() {
 
             // logic for finding duped plans
             function findPlan(typeOfPlan: any, isMemberNumber: any) {
-                let returnedItem = ' ';
+                let returnedItem = '';
                 if(typeOfPlan === 'IDShield') {
                     const found = dupeArray.find(tempItem => { return Array.from(tempItem['Member Number'])[0] === '7' })
                     if(found !== undefined) {
@@ -277,15 +277,15 @@ export default function Home() {
             let dataValues = { 
                 /* Legal Shield Sheet Values */
                 'Legal Plan #': {
-                    value: (currentItem['Plan Description'].toLowerCase().includes('commercial') ? ' ' : currentItem['Plan Description'].toLowerCase().includes('business') ? ' ' : Array.from( currentItem['Member Number'] )[0] === '1' ? currentItem['Member Number'] : dupeArray.length !== 0 ? findPlan('Legal Shield', true) : '' ),
+                    value: (currentItem['Plan Description'].toLowerCase().includes('commercial') ? '' : currentItem['Plan Description'].toLowerCase().includes('business') ? '' : Array.from( currentItem['Member Number'] )[0] === '1' ? currentItem['Member Number'] : dupeArray.length !== 0 ? findPlan('Legal Shield', true) : '' ),
                     inUse: false
                 },
                 'IDShield #': {
-                    value: (Array.from( currentItem['Member Number'] )[0] === '7' ? currentItem['Member Number']: dupeArray.length !== 0 ? findPlan('IDShield', true) :  ' '),
+                    value: (Array.from( currentItem['Member Number'] )[0] === '7' ? currentItem['Member Number']: dupeArray.length !== 0 ? findPlan('IDShield', true) :  ''),
                     inUse: false
                 },
                 'CDLP #': {
-                    value: (currentItem['Plan Description'].toLowerCase().includes('commercial') ? currentItem['Member Number'] : dupeArray.length !== 0 ? findPlan('Commercial', true) : ' '),
+                    value: (currentItem['Plan Description'].toLowerCase().includes('commercial') ? currentItem['Member Number'] : dupeArray.length !== 0 ? findPlan('Commercial', true) : ''),
                     inUse: false
                 },
                 'Small Buisness Plan #': {
@@ -353,15 +353,15 @@ export default function Home() {
                     inUse: false
                 },
                 'Legal Shield Monthly Rate': {
-                    value: (currentItem['Plan Description'].toLowerCase().includes('commercial') ? ' ' : currentItem['Plan Description'].toLowerCase().includes('business') ? ' ' : Array.from( currentItem['Member Number'] )[0] === '1' ? currentItem['Monthly Premium'] : dupeArray.length !== 0 ? findPlan('Legal Shield', false) : ''  ),
+                    value: (currentItem['Plan Description'].toLowerCase().includes('commercial') ? '' : currentItem['Plan Description'].toLowerCase().includes('business') ? '' : Array.from( currentItem['Member Number'] )[0] === '1' ? currentItem['Monthly Premium'] : dupeArray.length !== 0 ? findPlan('Legal Shield', false) : ''  ),
                     inUse: false
                 },
                 'IDShield Monthly Rate': {
-                    value: (Array.from( currentItem['Member Number'] )[0] === '7' ? currentItem['Monthly Premium'] : dupeArray.length !== 0 ? findPlan('IDShield', false) : ' '),
+                    value: (Array.from( currentItem['Member Number'] )[0] === '7' ? currentItem['Monthly Premium'] : dupeArray.length !== 0 ? findPlan('IDShield', false) : ''),
                     inUse: false
                 },
                 'CDLP Monthly Rate': {
-                    value: (currentItem['Plan Description'].toLowerCase().includes('commercial') ? currentItem['Monthly Premium'] : dupeArray.length !== 0 ? findPlan('Commercial', false) : ' '),
+                    value: (currentItem['Plan Description'].toLowerCase().includes('commercial') ? currentItem['Monthly Premium'] : dupeArray.length !== 0 ? findPlan('Commercial', false) : ''),
                     inUse: false
                 },
                 'Small Biz Monthly Rate': {
