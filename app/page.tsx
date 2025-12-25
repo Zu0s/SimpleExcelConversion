@@ -617,7 +617,7 @@ export default function Home() {
         <>
         {/* Password Page */}
         { userSettings.password === '' ?
-            <div className='grid grid-cols-3 grid-rows-3 items-center justify-center h-screen'>
+            <div className='grid grid-cols-3 grid-rows-3 items-center justify-center w-screen h-screen bg-[url(./vecteezy_blue-tech-digital.jpg)] bg-cover'>
                 <Modal isOpen={isOpen} setIsOpen={setIsOpen} mainSettings={mainSettings} userSettings={userSettings}/>
                 <form onSubmit={handleSubmit} className='flex flex-col mt-2 self-start row-start-2 col-start-2 '>
                     <div className=''>
@@ -686,7 +686,7 @@ export default function Home() {
                 <h1 className='text-xl self-center text-left'>Created by <a className={`rounded-md bg-[#1B1917] hover:bg-[#292524] p-1 text-xl`} target="_blank" rel="noopener noreferrer" href='https://www.linkedin.com/in/brandonbutkovich/'>Zu0s</a></h1>      
                 <div className='flex flex-row'>
                     <button className={`${buttonStyles} border-none w-fit text-xl`} onClick={handleSupport}>{ userSettings.settingIsOpen ? <p data-tooltip={`Title with Support and your name`}>brandon.butk@gmail.com</p> : 'Support'}</button> 
-                    <h1 className='text-xl self-center place-self-end text-right ml-4'>V 1.02.01</h1>
+                    <h1 className='text-xl self-center place-self-end text-right ml-4'>V 1.02.02</h1>
                 </div>
             </footer>
         </div>  
