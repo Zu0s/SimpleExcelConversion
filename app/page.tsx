@@ -39,6 +39,8 @@ export default function Home() {
     /* Handle Modal */
     const [isOpen, setIsOpen] = useState(false)
 
+    const [navIsOpen, setNavIsOpen] = useState(false)
+
     /* Handles Password */
     const [passInput, setPassInput] = useState<string>('')
 
@@ -46,14 +48,40 @@ export default function Home() {
     const [userSettings, setUserSettings]: any = useState({ 
         password: '', 
         user: '',
+        settingIsOpen: false,
+        userProfileIsOpen: false
     })
+    
+    /* Define text for the user Button */
+    /*
+        [A-Z] | Find Capital  
+        .*    | everything else after and unlimited times delete everything from first capital 
+        -
+        exp: "helloName" | returns: hello
+    */   
+        const firstName: string = userSettings.user.charAt( 0 ).toUpperCase() + userSettings.user.replace( /[A-Z].*/ , '').replace(userSettings.user.charAt(0), '')
+        const lastName: string = userSettings.user.charAt( firstName.length ).toUpperCase() // this fails
+        const userButtonText: string = firstName + ' ' + lastName
 
+    function handleSupport () { // toggle settings button
+        return setUserSettings((prevUserSettings: any) => {
+            return{ ...prevUserSettings, settingIsOpen: !prevUserSettings.settingIsOpen }
+        } )    
+    }
+
+    function handleNavIsOpen () {
+        return setNavIsOpen((prevState: boolean) => {
+            return (!prevState)
+        })
+    }
+
+    /* Functions */    
     function handlePassInputChange(e: any){
         const {value} = e.target
         setPassInput(() => (value))
     }
 
-    function checkPass(inputPass: string) {
+    function checkPass(inputPass: string) { /* Future make this api request */
         const foundUser = shittyDb.users.find((currentUser) => (inputPass === currentUser.password))
         if (foundUser) {
             setUserSettings((prevUserSettings: any) => {
@@ -61,9 +89,10 @@ export default function Home() {
                 return ({ // allow access
                     ...shittyDb[foundUser.user],
                     password: foundUser.password,
-                    user: foundUser.user,
+                    user: foundUser.user
                 })
             })
+            // console.log(userSettings)
             setMainSettings((prevMainSettings: any) => { // should set main settings to be user settings 
                 const tempUser = shittyDb[foundUser.user]
                 return {
@@ -75,6 +104,11 @@ export default function Home() {
         } else {
             setIsOpen(true)
         }
+    }
+
+    function handleSignOut() {
+        window.localStorage.removeItem('tempPass')
+        return window.location.reload();
     }
 
     function handleSubmit(e: any) { 
@@ -581,6 +615,7 @@ export default function Home() {
 
     return (
         <>
+        {/* Password Page */}
         { userSettings.password === '' ?
             <div className='grid grid-cols-3 grid-rows-3 items-center justify-center h-screen'>
                 <Modal isOpen={isOpen} setIsOpen={setIsOpen} mainSettings={mainSettings} userSettings={userSettings}/>
@@ -600,41 +635,61 @@ export default function Home() {
                 <button onClick={handleSubmit} className={`${buttonStyles}  w-fit justify-self-start self-start ml-2 mt-[3.5rem] col-start-3 row-start-2`}>Submit</button>
             </div>
         :
-        <div className={`${isOpen === true ? 'blur-sm': ''}`}>
-        <div className='m-10'>
-          <h1 className='text-6xl text-center'>Simple Upload Conversion</h1>
-        </div>
-    
-        <div className='h-full'>
-          <Modal isOpen={isOpen} setIsOpen={setIsOpen} mainSettings={mainSettings} userSettings={userSettings}/>
-          <div>
-            <FileImporter defaultMainSettings={defaultMainSettings} mainSettings={mainSettings} setMainSettings={setMainSettings} workbook={workbook} setWorkbook={setWorkbook} fielfieldNoteSheet={fieldNoteSheet} setFieldNoteSheet={setFieldNoteSheet} userSettings={userSettings}/>
-    
-            <div className='flex flex-row gap-4 mx-5 my-2 justify-evenly' >
-              {mainSettings.sheetName !== '' ?
-                    tempToolTipConvert.length > 0 ? 
-                      <div data-tooltip={`Missing: ${toolTipConvert}`} >
-                          <button disabled={true} className={` ${buttonStyles} text-[#b23800] pointer-events-none cursor-not-allowed`} onClick={convertSheet}>Convert</button>
-                      </div>
-                      : <button onClick={convertSheet} className={`${buttonStyles}  hover:bg-[#292524]`}>Convert</button>
-                  :null
-              }
-              {mainSettings.convertedSheet !== undefined ?
-                  !mainSettings.hasStateUpdated ? 
-                  <button onClick={downloadSheet} className={`${buttonStyles}`}>Download</button>
-                      :<div data-tooltip={`Something has changed re convert the file`}> <button disabled={true} className={`${buttonStyles} cursor-not-allowed text-[#b23800] pointer-events-none`} >Re Convert</button> </div>
-                  :null
-              }
-              {mainSettings.convertedSheet !== undefined?
-                  <button onClick={() => setIsOpen(true)} className={`${buttonStyles}`}>Check Log</button>
-                  : null
-              }
+        <div  className={`${isOpen === true ? 'blur-sm': ''} flex flex-col flex-1 bg-[url(./vecteezy_blue-tech-digital.jpg)] opacity-80 bg-cover `}>
+        {/* Main View */}    
+            <nav id='Nav' className='px-4 pb-2 mb-2 flex flex-row justify-between relative bg-[#1B1917]'>
+                <h1 className='text-4xl mt-4 ml-14 self-center bg-[#EDF1FB] bg-clip-text text-transparent bg-clip-text text-transparent bg-clip-text text-transparent opacity-[100%]'>Simple Excel Conversion</h1>
+                <div className='overflow-visible text-center absolute right-[0%] top-[0%] mr-4 mt-2 '>
+                    <button className={` mr-2 bg-[#1B1917] border-2 border-[#1a1816] ${ navIsOpen ? ' rounded-t-md ' : 'rounded-md  hover:border-2 hover:border-[#706E6C]' }  text-xl p-3 px-5 `} onClick={handleNavIsOpen}>{userButtonText} </button>
+                    {  !navIsOpen ? null
+                    : 
+                        <div className='relative flex flex-col bg-[#1B1917] text-lg px-2 rounded-md '>
+                            <button data-tooltip={`Future`} className='text-[#a5a8b1] mt-2' disabled>Settings</button>
+                            <button className='mb-2' onClick={handleSignOut}>Sign Out</button>
+                        </div>
+                    }
+                </div>
+            </nav>
+                    {/* bg-[#00132C]  */}
+            <div id='Body' className='min-w-[50%]  h-full'>
+                <Modal isOpen={isOpen} setIsOpen={setIsOpen} mainSettings={mainSettings} userSettings={userSettings}/>
+                <div className={`min-h-[25%] min-w-[55%] rounded-md  bg-[#00132C]/[var(--bg-opacity)] [--bg-opacity:80%] justify-self-center  ${mainSettings.sheetName === '' || mainSettings.fieldNoteSheetName === '' ? 'content-center' : ''}`}>
+                    <FileImporter defaultMainSettings={defaultMainSettings} mainSettings={mainSettings} setMainSettings={setMainSettings} workbook={workbook} setWorkbook={setWorkbook} fielfieldNoteSheet={fieldNoteSheet} setFieldNoteSheet={setFieldNoteSheet} userSettings={userSettings}/>
+        
+                    { mainSettings.sheetName != '' || mainSettings.fieldNoteSheetName != '' ? 
+                    <div className={` ${ mainSettings.convertedSheet !== undefined ? 'justify-between px-[9%]' : 'justify-center' } flex flex-row my-4 `} >
+                        {mainSettings.sheetName !== '' ?
+                            tempToolTipConvert.length > 0 ? 
+                                <div  className='justify-center' data-tooltip={`Missing: ${toolTipConvert}`} >
+                                    <button disabled={true} className={` ${buttonStyles} text-[#a5a8b1] pointer-events-none cursor-not-allowed self-center mx-auto`} onClick={convertSheet}>Convert</button>
+                                </div>
+                                : <button onClick={convertSheet} className={`${buttonStyles}  hover:bg-[#292524]`}>Convert</button>
+                            :null
+                        }
+                        {mainSettings.convertedSheet !== undefined ?
+                            !mainSettings.hasStateUpdated ? 
+                            <button onClick={downloadSheet} className={`${buttonStyles}`}>Download</button>
+                                :<div data-tooltip={`Something has changed re convert the file`}> <button disabled={true} className={`${buttonStyles} cursor-not-allowed text-[#a5a8b1] pointer-events-none`} >Re Convert</button> </div>
+                            :null
+                        }
+                        {mainSettings.convertedSheet !== undefined?
+                            <button onClick={() => setIsOpen(true)} className={`${buttonStyles}`}>Check Log</button>
+                            : null
+                        }
+                    </div>
+                    : null                        
+                    }
+                    {/* <button onClick={checkState}>Random Testing</button>  */}
+                </div>
             </div>
-    
-            {/* <button onClick={checkState}>Random Testing</button>  */}
-          </div>
-        </div>
-        </div>    
+            <footer id='Footer' className='flex flex-row pb-3 mt-3 pt-2 px-4 justify-between bg-[#1B1917]'>
+                <h1 className='text-xl self-center text-left'>Created by <a className={`rounded-md bg-[#1B1917] hover:bg-[#292524] p-1 text-xl`} target="_blank" rel="noopener noreferrer" href='https://www.linkedin.com/in/brandonbutkovich/'>Zu0s</a></h1>      
+                <div className='flex flex-row'>
+                    <button className={`${buttonStyles} border-none w-fit text-xl`} onClick={handleSupport}>{ userSettings.settingIsOpen ? <p data-tooltip={`Title with Support and your name`}>brandon.butk@gmail.com</p> : 'Support'}</button> 
+                    <h1 className='text-xl self-center place-self-end text-right ml-4'>V 1.02.01</h1>
+                </div>
+            </footer>
+        </div>  
         }
         </>
     );

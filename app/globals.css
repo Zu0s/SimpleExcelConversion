@@ -3,9 +3,8 @@
 @tailwind utilities;
 
 :root {
-  --background: #1B1917;
-  --foreground: #171717;
-  --textColor: #FF5100;
+  --foreground: #00132C;
+  --textColor: #EDF1FB;
 }
 
 input::-webkit-outer-spin-button,
@@ -16,8 +15,8 @@ input::-webkit-inner-spin-button {
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #1B1917;
-    --foreground: #ededed;
+    --background: linear-gradient(217deg,rgba(0, 46, 232, 1) 0%, rgba(0, 12, 71, 1) 50%, rgba(0, 46, 232, 1) 100%);;
+    --foreground: #0B3FB6;
   }
 }
 
@@ -39,7 +38,7 @@ body {
   opacity: 0;
 
   padding: 10px;
-  color: #FF5100;
+  color: #EDF1FB;
   border: 1px solid;
   border-color: #706E6C;
   border-radius: 10px;
@@ -74,7 +73,7 @@ input[type= 'checkbox'] {
 
 input[type='checkbox']:checked:after {
   content: "\2714";
-  color: #FF5100;
+  color: #EDF1FB;
   position: absolute;
   left: 50%;
   top: 50%;
