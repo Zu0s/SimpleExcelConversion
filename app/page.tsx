@@ -657,7 +657,7 @@ export default function Home() {
                     <FileImporter defaultMainSettings={defaultMainSettings} mainSettings={mainSettings} setMainSettings={setMainSettings} workbook={workbook} setWorkbook={setWorkbook} fielfieldNoteSheet={fieldNoteSheet} setFieldNoteSheet={setFieldNoteSheet} userSettings={userSettings}/>
         
                     { mainSettings.sheetName != '' || mainSettings.fieldNoteSheetName != '' ? 
-                    <div className={` ${ mainSettings.convertedSheet !== undefined ? 'justify-between px-[9%]' : 'justify-center' } flex flex-row my-4 `} >
+                    <div className={` ${ mainSettings.convertedSheet !== undefined ? 'justify-between px-[9%]' : 'justify-center' } flex flex-row my-4 pb-3`} >
                         {mainSettings.sheetName !== '' ?
                             tempToolTipConvert.length > 0 ? 
                                 <div  className='justify-center' data-tooltip={`Missing: ${toolTipConvert}`} >
