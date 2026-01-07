@@ -9,21 +9,21 @@ import { buttonStyles } from './groupedStyles';
 import * as XLSX from 'xlsx'
 
 const defaultMainSettings:object = {
-  sheetName: '',
-  fieldNoteSheetName: '',
-  newGroup: false,
-  language: { value: 'English', label: 'English' },
-  groupNumber: '', 
-  company: '', 
-  spheres: [], 
-  refferalSource: '', 
-  convertedSheet: undefined,
-  dupeCounter: 0,
-  updateCounter: 0,
-  unusedCollumsLegalShield: [],
-  failedMappings: [],
-  exisitingDupesFound: [],
-  hasStateUpdated: false
+    sheetName: '',
+    fieldNoteSheetName: '',
+    newGroup: false,
+    language: { value: 'English', label: 'English' },
+    groupNumber: '', 
+    company: '', 
+    spheres: [], 
+    refferalSource: '', 
+    convertedSheet: undefined,
+    dupeCounter: 0,
+    updateCounter: 0,
+    unusedCollumsLegalShield: [],
+    failedMappings: [],
+    exisitingDupesFound: [],
+    hasStateUpdated: false
 }
 
 export default function Home() {
@@ -59,9 +59,11 @@ export default function Home() {
         -
         exp: "helloName" | returns: hello
     */   
-        const firstName: string = userSettings.user.charAt( 0 ).toUpperCase() + userSettings.user.replace( /[A-Z].*/ , '').replace(userSettings.user.charAt(0), '')
-        const lastName: string = userSettings.user.charAt( firstName.length ).toUpperCase() // this fails
-        const userButtonText: string = firstName + ' ' + lastName
+
+    const firstName: string = userSettings.user.charAt( 0 ).toUpperCase() + userSettings.user.replace( /[A-Z].*/ , '').replace(userSettings.user.charAt(0), '')
+    const lastName: string = userSettings.user.charAt( firstName.length ).toUpperCase() // this fails
+    const userButtonText: string = firstName + ' ' + lastName
+
 
     function handleSupport () { // toggle settings button
         return setUserSettings((prevUserSettings: any) => {
@@ -519,52 +521,6 @@ export default function Home() {
             filterdSheet.push(currentUserObject)
             // console.log(mainSettings.unusedCollumsLegalShield)
 
-            /* New JSON Object */
-            // filterdSheet.push({
-            //     ...(handleUpdate() && existingContacts[0]),
-            //     'Legal Plan #': (currentItem['Plan Description'].toLowerCase().includes('commercial') ? ' ' : currentItem['Plan Description'].toLowerCase().includes('business') ? ' ' : Array.from( currentItem['Member Number'] )[0] === '1' ? currentItem['Member Number'] : dupeArray.length !== 0 ? findPlan('Legal Shield', true) : '' ), 
-            //     'IDShield #': (Array.from( currentItem['Member Number'] )[0] === '7' ? currentItem['Member Number']: dupeArray.length !== 0 ? findPlan('IDShield', true) :  ' '), 
-            //     'CDLP #': (currentItem['Plan Description'].toLowerCase().includes('commercial') ? currentItem['Member Number'] : dupeArray.length !== 0 ? findPlan('Commercial', true) : ' '), 
-            //     'Small Buisness Plan #': (currentItem['Plan Description'].toLowerCase().includes('business') ? currentItem['Member Number'] : dupeArray.length !== 0 ? findPlan('Buisness', true) : ''), 
-            //     'First Name (0r) Group Account Name': (nameFixer(currentItem['First Name'])),
-            //     'Last Name': (nameFixer(currentItem['Last Name'])),
-            //     'Address': currentItem['Address 1'],
-            //     'Address 2': currentItem['Address 2'],
-            //     'Address 3': currentItem['Address 3'],
-            //     'Country': currentItem['Country'],
-            //     'City': currentItem['City'],
-            //     'State': currentItem['State/Province'],
-            //     'Zip': currentItem['Zip/Postal Code'],
-            //     'Email': currentItem['Email'].toLowerCase(),
-            //     'Home Phone': currentItem['Home Phone'],
-            //     'Day Phone': currentItem['Day Phone'],
-            //     'Cell Phone': currentItem['Cell Phone'] ,
-            //     'Birthday': (currentItem['Date of Birth']), 
-            //     'Annual Premium': currentItem['Annual Premium'],
-            //     'LegalShield Monthly Rate': (currentItem['Plan Description'].toLowerCase().includes('commercial') ? ' ' : currentItem['Plan Description'].toLowerCase().includes('business') ? ' ' : Array.from( currentItem['Member Number'] )[0] === '1' ? currentItem['Monthly Premium'] : dupeArray.length !== 0 ? findPlan('Legal Shield', false) : ''  ), 
-            //     'IDShield Monthly Rate': (Array.from( currentItem['Member Number'] )[0] === '7' ? currentItem['Monthly Premium'] : dupeArray.length !== 0 ? findPlan('IDShield', false) : ' '), 
-            //     'CDLP Monthly Rate': (currentItem['Plan Description'].toLowerCase().includes('commercial') ? currentItem['Monthly Premium'] : dupeArray.length !== 0 ? findPlan('Commercial', false) : ' '), 
-            //     'Small Biz Monthly Rate': (currentItem['Plan Description'].toLowerCase().includes('business') ? currentItem['Member Number'] : dupeArray.length !== 0 ? findPlan('Buisness', false) : ''), 
-            //     'Plans Offered/Chosen' : filteredPlanDescription, 
-            //     'Pay Periods': currentItem['Pay Period'],
-            //     'Pay Period Amount': currentItem['Pay Period Amount'],
-            //     'Group Division': currentItem['Group Division'],
-            //     'Employee ID': currentItem['Employee ID'],
-            //     'Production Date': (currentItem['Production Date']),
-            //     'Effective Date': (currentItem['Effective Date']),
-            //     'Cancel Date': (currentItem['Cancel Date']),
-            //     'Last Plan Amount': (currentItem['Last Plan Amount Update']),
-            //     'Pre-Cancel': currentItem['Pre-Cancel'],
-            //     'Pending IDT': currentItem['Pending IDT'],
-            //     'Status (pick one)': currentItem['Status'],
-            //     'Referral Source (pick one)': mainSettings.refferalSource.value, 
-            //     'Language': (filteredPlanDescription.toLowerCase().includes('spanish')? 'Spanish' : mainSettings.language.value), 
-            //     'Group # ': mainSettings.groupNumber,
-            //     'Company': mainSettings.company, 
-            //     'Spheres': filteredSpheres, 
-            //     'Contact Type': ' ' /* CHECK WITH Dad: CONFUSED */
-            // })
-
             /* remove next item if duplicate detected */
             if (dupeArray.length !== 0 ) { for (let spliceI = 0; spliceI < dupeArray.length; spliceI++) {
                 objectMainSheet.splice(objectMainSheet.findIndex((item: any) => { return item['Member Number'].toString() === dupeArray[spliceI]['Member Number'] }), 1 )
@@ -585,11 +541,6 @@ export default function Home() {
                 hasStateUpdated: false
             }
         })
-
-        // console.log('----- Convert Log -----')
-        // console.log(`Duplicates: ${dupeCounter}`)
-        // console.log(`Updates: ${updateCounter}`)
-        // console.log(filterdSheet) // REMOVE FOR LIVE PUSH
     }
 
   function downloadSheet() {
@@ -599,13 +550,6 @@ export default function Home() {
     XLSX.utils.book_append_sheet(newWB, newWS, "NewDownload" )
     XLSX.writeFile(newWB, `simpleExcelConvertDownload.xlsx`)
   }
-
-
-    // function checkState() {
-    //     console.log(userSettings)
-    //     console.log(shittyDb)
-    //     console.log(userSettings.excelHeaders)
-    // }
 
   /* Handles Toop Tip Text */
   let toolTipConvert = ''
@@ -650,7 +594,6 @@ export default function Home() {
                     }
                 </div>
             </nav>
-                    {/* bg-[#00132C]  */}
             <div id='Body' className='min-w-[50%]  h-full'>
                 <Modal isOpen={isOpen} setIsOpen={setIsOpen} mainSettings={mainSettings} userSettings={userSettings}/>
                 <div className={`min-h-[25%] min-w-[55%] rounded-md  bg-[#00132C]/[var(--bg-opacity)] [--bg-opacity:80%] justify-self-center  ${mainSettings.sheetName === '' || mainSettings.fieldNoteSheetName === '' ? 'content-center' : ''}`}>
@@ -679,7 +622,6 @@ export default function Home() {
                     </div>
                     : null                        
                     }
-                    {/* <button onClick={checkState}>Random Testing</button>  */}
                 </div>
             </div>
             <footer id='Footer' className='flex flex-row pb-3 mt-3 pt-2 px-4 justify-between bg-[#1B1917]'>
