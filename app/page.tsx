@@ -161,7 +161,12 @@ export default function Home() {
             setIsOpen(true)
             setMainSettings((prevMainSettings: any) => ({
                 ...prevMainSettings,
+                convertedSheet: undefined,
+                dupeCounter: 0,
+                updateCounter: 0,
+                unusedCollumsLegalShield: [],
                 failedMappings: ['Conversion failed. Check the Legal Shield file and try again.'],
+                exisitingDupesFound: [],
                 hasStateUpdated: false
             }))
         }

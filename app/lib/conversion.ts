@@ -65,12 +65,15 @@ export function languageValue(language: unknown, planDescription: string): strin
     return 'English'
 }
 
-export function personKey(row: Record<string, unknown>): string {
+export function personKey(row: Record<string, unknown>, rowId?: string | number): string {
     const first = nameFixer(row['First Name'])
     const last = nameFixer(row['Last Name'])
     const email = String(row['Email'] ?? '').trim().toLowerCase()
-    if (!first && !last && !email) return ''
-    return `${first}\0${last}\0${email}`
+    if (email) return `${first}\0${last}\0email:${email}`
+    const phone = phoneForCompare(row['Cell Phone'])
+    if (phone) return `${first}\0${last}\0phone:${phone}`
+    if (!first && !last) return ''
+    return `${first}\0${last}\0row:${rowId ?? ''}`
 }
 
 export function phoneForCompare(value: unknown): string {
@@ -417,12 +420,12 @@ export function convertLegalShieldRows(
         if (processed.has(i)) continue
 
         const currentItem = rows[i]
-        const key = personKey(currentItem)
+        const key = personKey(currentItem, i)
         const dupeIndexes: number[] = []
-        if (key !== '') {
+        if (key !== '' && !key.includes('\0row:')) {
             for (let j = i + 1; j < rows.length; j++) {
                 if (processed.has(j)) continue
-                if (personKey(rows[j]) === key) dupeIndexes.push(j)
+                if (personKey(rows[j], j) === key) dupeIndexes.push(j)
             }
         }
 

@@ -89,6 +89,20 @@ describe('personKey', () => {
     it('does not merge blank unidentified rows together', () => {
         assert.equal(personKey({}), '')
     })
+
+    it('does not treat same-name rows with no email or phone as the same person', () => {
+        assert.notEqual(
+            personKey({ 'First Name': 'Jane', 'Last Name': 'Doe' }, 0),
+            personKey({ 'First Name': 'Jane', 'Last Name': 'Doe' }, 1)
+        )
+    })
+
+    it('groups same-name rows without email when the phone number matches', () => {
+        assert.equal(
+            personKey({ 'First Name': 'Jane', 'Last Name': 'Doe', 'Cell Phone': '(555) 111-2222' }),
+            personKey({ 'First Name': 'Jane', 'Last Name': 'Doe', 'Cell Phone': '5551112222' })
+        )
+    })
 })
 
 describe('phoneForCompare', () => {
@@ -176,6 +190,22 @@ describe('convertLegalShieldRows', () => {
         assert.equal(jane?.['IDShield #'], '72345')
         assert.equal(jane?.['IDShield Monthly Rate'], '12.00')
         assert.equal(jane?.['Plans Offered/Chosen'], 'Family Legal Plan | IDShield')
+    })
+
+    it('does not merge different people who share a name but have no email or phone', () => {
+        const result = convertLegalShieldRows(
+            [
+                legalRow({ Email: undefined, 'Cell Phone': '', 'Member Number': '12345' }),
+                legalRow({ Email: undefined, 'Cell Phone': '', 'Member Number': '19999', 'Monthly Premium': '18.00' })
+            ],
+            [],
+            baseSettings
+        )
+
+        assert.equal(result.convertedSheet.length, 2)
+        assert.equal(result.dupeCounter, 0)
+        assert.equal(result.convertedSheet[0]['Legal Plan #'], '12345')
+        assert.equal(result.convertedSheet[1]['Legal Plan #'], '19999')
     })
 
     it('does not throw on numeric member numbers or missing email, name, and phone', () => {
