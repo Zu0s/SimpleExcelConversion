@@ -1,1 +1,2 @@
 export const buttonStyles = 'rounded-md  bg-[#1B1917] px-3.5 py-2.5 text-3xl font-semibold shadow-xs hover:bg-[#292524] focus-visible:outline-2 focus-visible:outline-offset-2'
+export const techButtonStyles = 'rounded-md bg-[#0B3FB6] px-3.5 py-2.5 text-3xl font-semibold text-[#EDF1FB] shadow-xs hover:bg-[#002EE8] focus-visible:outline-2 focus-visible:outline-offset-2'

@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import Modal from './components/Modal';
 import FileImporter from './components/FileImporter';
 import { shittyDb } from './keys';
-import { buttonStyles } from './groupedStyles';
+import { techButtonStyles } from './groupedStyles';
 
 import * as XLSX from 'xlsx'
 
@@ -579,15 +579,15 @@ export default function Home() {
                 <button onClick={handleSubmit} className='rounded-md bg-[#0B3FB6] text-[#EDF1FB] px-3.5 py-2.5 text-3xl font-semibold shadow-xs hover:bg-[#002EE8] w-fit justify-self-start self-start ml-2 mt-[3.5rem] col-start-3 row-start-2'>Submit</button>
             </div>
         :
-        <div  className={`${isOpen === true ? 'blur-sm': ''} flex flex-col flex-1 bg-[url(./vecteezy_blue-tech-digital.jpg)] opacity-80 bg-cover `}>
+        <div  className={`${isOpen === true ? 'blur-sm': ''} flex flex-col flex-1 bg-gradient-to-b from-[#002EE8] to-[#000C47] font-[family-name:var(--font-geist-sans)]`}>
         {/* Main View */}    
-            <nav id='Nav' className='px-4 pb-2 mb-2 flex flex-row justify-between relative bg-[#1B1917]'>
-                <h1 className='text-4xl mt-4 ml-14 self-center bg-[#EDF1FB] bg-clip-text text-transparent bg-clip-text text-transparent bg-clip-text text-transparent opacity-[100%]'>Simple Excel Conversion</h1>
+            <nav id='Nav' className='px-4 pb-2 mb-2 flex flex-row justify-between relative bg-[#000C47]'>
+                <h1 className='text-4xl mt-4 ml-14 self-center text-[#EDF1FB]'>Simple Excel Conversion</h1>
                 <div className='overflow-visible text-center absolute right-[0%] top-[0%] mr-4 mt-2 '>
-                    <button className={` mr-2 bg-[#1B1917] border-2 border-[#1a1816] ${ navIsOpen ? ' rounded-t-md ' : 'rounded-md  hover:border-2 hover:border-[#706E6C]' }  text-xl p-3 px-5 `} onClick={handleNavIsOpen}>{userButtonText} </button>
+                    <button className={` mr-2 bg-[#000C47] border-2 border-[#0B3FB6] ${ navIsOpen ? ' rounded-t-md ' : 'rounded-md  hover:border-2 hover:border-[#002EE8]' }  text-xl p-3 px-5 `} onClick={handleNavIsOpen}>{userButtonText} </button>
                     {  !navIsOpen ? null
                     : 
-                        <div className='relative flex flex-col bg-[#1B1917] text-lg px-2 rounded-md '>
+                        <div className='relative flex flex-col bg-[#000C47] text-lg px-2 rounded-md border-2 border-[#0B3FB6] '>
                             <button data-tooltip={`Future`} className='text-[#a5a8b1] mt-2' disabled>Settings</button>
                             <button className='mb-2' onClick={handleSignOut}>Sign Out</button>
                         </div>
@@ -596,7 +596,7 @@ export default function Home() {
             </nav>
             <div id='Body' className='min-w-[50%]  h-full'>
                 <Modal isOpen={isOpen} setIsOpen={setIsOpen} mainSettings={mainSettings} userSettings={userSettings}/>
-                <div className={`min-h-[25%] min-w-[55%] rounded-md  bg-[#00132C]/[var(--bg-opacity)] [--bg-opacity:80%] justify-self-center  ${mainSettings.sheetName === '' || mainSettings.fieldNoteSheetName === '' ? 'content-center' : ''}`}>
+                <div className={`min-h-[25%] min-w-[55%] rounded-md bg-[#00132C] justify-self-center  ${mainSettings.sheetName === '' || mainSettings.fieldNoteSheetName === '' ? 'content-center' : ''}`}>
                     <FileImporter defaultMainSettings={defaultMainSettings} mainSettings={mainSettings} setMainSettings={setMainSettings} workbook={workbook} setWorkbook={setWorkbook} fielfieldNoteSheet={fieldNoteSheet} setFieldNoteSheet={setFieldNoteSheet} userSettings={userSettings}/>
         
                     { mainSettings.sheetName != '' || mainSettings.fieldNoteSheetName != '' ? 
@@ -604,19 +604,19 @@ export default function Home() {
                         {mainSettings.sheetName !== '' ?
                             tempToolTipConvert.length > 0 ? 
                                 <div  className='justify-center' data-tooltip={`Missing: ${toolTipConvert}`} >
-                                    <button disabled={true} className={` ${buttonStyles} text-[#a5a8b1] pointer-events-none cursor-not-allowed self-center mx-auto`} onClick={convertSheet}>Convert</button>
+                                    <button disabled={true} className={` ${techButtonStyles} text-[#a5a8b1] pointer-events-none cursor-not-allowed self-center mx-auto`} onClick={convertSheet}>Convert</button>
                                 </div>
-                                : <button onClick={convertSheet} className={`${buttonStyles}  hover:bg-[#292524]`}>Convert</button>
+                                : <button onClick={convertSheet} className={`${techButtonStyles}`}>Convert</button>
                             :null
                         }
                         {mainSettings.convertedSheet !== undefined ?
                             !mainSettings.hasStateUpdated ? 
-                            <button onClick={downloadSheet} className={`${buttonStyles}`}>Download</button>
-                                :<div data-tooltip={`Something has changed re convert the file`}> <button disabled={true} className={`${buttonStyles} cursor-not-allowed text-[#a5a8b1] pointer-events-none`} >Re Convert</button> </div>
+                            <button onClick={downloadSheet} className={`${techButtonStyles}`}>Download</button>
+                                :<div data-tooltip={`Something has changed re convert the file`}> <button disabled={true} className={`${techButtonStyles} cursor-not-allowed text-[#a5a8b1] pointer-events-none`} >Re Convert</button> </div>
                             :null
                         }
                         {mainSettings.convertedSheet !== undefined?
-                            <button onClick={() => setIsOpen(true)} className={`${buttonStyles}`}>Check Log</button>
+                            <button onClick={() => setIsOpen(true)} className={`${techButtonStyles}`}>Check Log</button>
                             : null
                         }
                     </div>
@@ -624,10 +624,10 @@ export default function Home() {
                     }
                 </div>
             </div>
-            <footer id='Footer' className='flex flex-row pb-3 mt-3 pt-2 px-4 justify-between bg-[#1B1917]'>
-                <h1 className='text-xl self-center text-left'>Created by <a className={`rounded-md bg-[#1B1917] hover:bg-[#292524] p-1 text-xl`} target="_blank" rel="noopener noreferrer" href='https://www.linkedin.com/in/brandonbutkovich/'>Zu0s</a></h1>      
+            <footer id='Footer' className='flex flex-row pb-3 mt-3 pt-2 px-4 justify-between bg-[#000C47]'>
+                <h1 className='text-xl self-center text-left'>Created by <a className={`rounded-md bg-[#000C47] hover:bg-[#002EE8] p-1 text-xl`} target="_blank" rel="noopener noreferrer" href='https://www.linkedin.com/in/brandonbutkovich/'>Zu0s</a></h1>      
                 <div className='flex flex-row'>
-                    <button className={`${buttonStyles} border-none w-fit text-xl`} onClick={handleSupport}>{ userSettings.settingIsOpen ? <p data-tooltip={`Title with Support and your name`}>brandon.butk@gmail.com</p> : 'Support'}</button> 
+                    <button className={`${techButtonStyles} border-none w-fit text-xl`} onClick={handleSupport}>{ userSettings.settingIsOpen ? <p data-tooltip={`Title with Support and your name`}>brandon.butk@gmail.com</p> : 'Support'}</button> 
                     <h1 className='text-xl self-center place-self-end text-right ml-4'>V 1.02.02</h1>
                 </div>
             </footer>
