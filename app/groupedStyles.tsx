@@ -1,5 +1,5 @@
 export const buttonStyles = 'rounded-md  bg-[#1B1917] px-3.5 py-2.5 text-3xl font-semibold shadow-xs hover:bg-[#292524] focus-visible:outline-2 focus-visible:outline-offset-2'
-export const techButtonStyles = 'rounded-xl bg-[#0B3FB6] px-3.5 py-2.5 text-3xl font-semibold text-[#EDF1FB] shadow-xs hover:bg-[#002EE8] focus-visible:outline-2 focus-visible:outline-offset-2'
+export const techButtonStyles = 'rounded-xl bg-[#0B3FB6] px-3.5 py-2.5 text-3xl font-semibold text-[#EDF1FB] shadow-xs hover:bg-[#093390] focus-visible:outline-2 focus-visible:outline-offset-2'
 export const disabledTechButtonStyles = 'rounded-xl bg-[#00132C] border-2 border-[#0B3FB6] px-3.5 py-2.5 text-3xl font-semibold text-[#EDF1FB] shadow-xs pointer-events-none cursor-not-allowed'
 export const panelStyles = 'rounded-2xl border-2 border-[#0B3FB6] bg-[#00132C]'
 export const pageGradientStyles = 'bg-[linear-gradient(90deg,#000816_0%,#003399_50%,#000816_100%)]'

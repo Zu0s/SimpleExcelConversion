@@ -626,7 +626,7 @@ export default function Home() {
                 </div>
             </div>
             <footer id='Footer' className={`mx-4 mb-4 ${panelStyles} px-6 py-4 flex flex-row justify-between`}>
-                <h1 className='text-xl self-center text-left'>Created by <a className={`rounded-xl hover:bg-[#002EE8] p-1 text-xl`} target="_blank" rel="noopener noreferrer" href='https://www.linkedin.com/in/brandonbutkovich/'>Zu0s</a></h1>      
+                <h1 className='text-xl self-center text-left'>Created by <a className={`rounded-xl hover:bg-[#093390] p-1 text-xl`} target="_blank" rel="noopener noreferrer" href='https://www.linkedin.com/in/brandonbutkovich/'>Zu0s</a></h1>      
                 <div className='flex flex-row'>
                     <button className={`${techButtonStyles} border-none w-fit text-xl`} onClick={handleSupport}>{ userSettings.settingIsOpen ? <p data-tooltip={`Title with Support and your name`}>brandon.butk@gmail.com</p> : 'Support'}</button> 
                     <h1 className='text-xl self-center place-self-end text-right ml-4'>V 1.02.02</h1>
