@@ -136,7 +136,17 @@ export default function FileImporter(props: any) {
         },
     })
     const selectStyles: StylesConfig<ConsoleConstructorOptions, true> = {
-        control: (styles: any) => ({ ...styles, backgroundColor: '#000C47', color: '#EDF1FB', border: '2px solid #0B3FB6', boxShadow: 'none', padding: '0.3rem', ':hover': { border: '2px solid #0B3FB6' }}),
+        control: (styles: any) => ({
+            ...styles,
+            backgroundColor: '#000C47',
+            color: '#EDF1FB',
+            borderColor: '#0B3FB6',
+            borderWidth: 2,
+            borderStyle: 'solid',
+            boxShadow: 'none',
+            padding: '0.3rem',
+            ':hover': { borderColor: '#0B3FB6', borderWidth: 2, borderStyle: 'solid' },
+        }),
         option: (styles: any, { isFocused, isSelected }) => { 
 
             return {
@@ -240,7 +250,7 @@ export default function FileImporter(props: any) {
                         <label className='modification-subTitle'>Group # </label>
                         <input 
                             onWheel={(e) => (e.target as HTMLInputElement).blur()}
-                            className='bg-[#000C47] border-2 border-[#0B3FB6] p-2 px-8 focus:outline-hidden outline-none w-full rounded-sm text-[#EDF1FB]'
+                            className='bg-[#000C47] border-[2px] border-[#0B3FB6] p-2 px-8 focus:outline-hidden outline-none w-full rounded-sm text-[#EDF1FB]'
                             type='number'
                             name='groupNumber'
                             onChange={handleInputChange}
@@ -250,7 +260,7 @@ export default function FileImporter(props: any) {
                     <div>
                         <label className='modification-subTitle'>Company </label>
                         <input 
-                            className='bg-[#000C47] border-2 border-[#0B3FB6] p-2 px-8 focus:outline-hidden outline-none w-full rounded-sm text-[#EDF1FB]'
+                            className='bg-[#000C47] border-[2px] border-[#0B3FB6] p-2 px-8 focus:outline-hidden outline-none w-full rounded-sm text-[#EDF1FB]'
                             type='text'
                             name='company'
                             onChange={handleInputChange}
