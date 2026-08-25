@@ -561,14 +561,14 @@ export default function Home() {
         <>
         {/* Password Page */}
         { userSettings.password === '' ?
-            <div className='grid grid-cols-3 grid-rows-3 items-center justify-center w-screen h-screen bg-[url(./vecteezy_blue-tech-digital.jpg)] bg-cover'>
+            <div className='grid grid-cols-3 grid-rows-3 items-center justify-center w-screen h-screen bg-gradient-to-b from-[#002EE8] to-[#000C47] font-[family-name:var(--font-geist-sans)]'>
                 <Modal isOpen={isOpen} setIsOpen={setIsOpen} mainSettings={mainSettings} userSettings={userSettings}/>
                 <form onSubmit={handleSubmit} className='flex flex-col mt-2 self-start row-start-2 col-start-2 '>
                     <div className=''>
-                        <h1 className='text-5xl text-center '>Enter Password</h1>
+                        <h1 className='text-5xl text-center text-[#EDF1FB]'>Enter Password</h1>
                     </div>
                     <input
-                        className='bg-[#292524] p-2 px-8 focus:outline-hidden outline-none w-full rounded-sm  text-3xl text-center font-bold'
+                        className='bg-[#000C47] border-2 border-[#0B3FB6] p-2 px-8 focus:outline-hidden outline-none w-full rounded-sm text-3xl text-center font-bold text-[#EDF1FB]'
                         type='password'
                         onChange={handlePassInputChange}
                         value={passInput}
@@ -576,7 +576,7 @@ export default function Home() {
                     </input>
                    
                 </form>
-                <button onClick={handleSubmit} className={`${buttonStyles}  w-fit justify-self-start self-start ml-2 mt-[3.5rem] col-start-3 row-start-2`}>Submit</button>
+                <button onClick={handleSubmit} className='rounded-md bg-[#0B3FB6] text-[#EDF1FB] px-3.5 py-2.5 text-3xl font-semibold shadow-xs hover:bg-[#002EE8] w-fit justify-self-start self-start ml-2 mt-[3.5rem] col-start-3 row-start-2'>Submit</button>
             </div>
         :
         <div  className={`${isOpen === true ? 'blur-sm': ''} flex flex-col flex-1 bg-[url(./vecteezy_blue-tech-digital.jpg)] opacity-80 bg-cover `}>
