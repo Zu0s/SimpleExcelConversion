@@ -189,10 +189,10 @@ export default function FileImporter(props: any) {
             onDragLeave={handleDragLeave}
         >
 
-            <div className={`flex ${ props.mainSettings.sheetName !== '' || props.mainSettings.fieldNoteSheetName !== '' ? 'flex-row gap-4 ': 'flex-col gap-4 ' } p-4 justify-between self-center w-full` }>
-                { props.mainSettings.sheetName !== '' || props.mainSettings.fieldNoteSheetName !== '' ? null : <p className={`file-importer--text ${isDragging === true ? 'allowChildDragging' : ''} text-5xl self-center justify-self-center`}>Select Files Below</p> }
+            <div className={`flex ${ props.mainSettings.sheetName !== '' || props.mainSettings.fieldNoteSheetName !== '' ? 'flex-row gap-4 p-4 justify-between self-center w-full' : 'flex-col items-center justify-center gap-4 p-4 mx-auto' }` }>
+                { props.mainSettings.sheetName !== '' || props.mainSettings.fieldNoteSheetName !== '' ? null : <p className={`file-importer--text ${isDragging === true ? 'allowChildDragging' : ''} text-5xl text-center`}>Select Files Below</p> }
                 
-                <div className={` flex ${ props.mainSettings.sheetName !== '' || props.mainSettings.fieldNoteSheetName !== '' ? 'flex-col': 'flex-row gap-4 mt-2'} `}>
+                <div className={` flex ${ props.mainSettings.sheetName !== '' || props.mainSettings.fieldNoteSheetName !== '' ? 'flex-col': 'flex-col items-center gap-4'} `}>
                     <label className={`  
                         ${ props.mainSettings.sheetName !== '' ? 'text-3xl' : `${techButtonStyles} text-xl w-fit justify-middle`} 
                         ${ props.mainSettings.sheetName  !== '' || props.mainSettings.fieldNoteSheetName !== '' ? '' : 'hello'  } 
@@ -210,7 +210,7 @@ export default function FileImporter(props: any) {
                     >
                     </input>
             
-                    <div className={ ` ${props.mainSettings.sheetName  !== '' || props.mainSettings.fieldNoteSheetName !== '' ? 'mt-2' : null} flex`}>
+                    <div className={ ` ${props.mainSettings.sheetName  !== '' || props.mainSettings.fieldNoteSheetName !== '' ? 'mt-2 flex' : 'flex items-center justify-center'}`}>
                         <label className={`  ${props.mainSettings.newGroup ? `${disabledTechButtonStyles} text-xl w-fit` : props.mainSettings.fieldNoteSheetName === '' ? `${techButtonStyles} text-xl w-fit`  : 'text-3xl'} cursor-pointer `}  htmlFor='fieldNote-importer'>{` ${props.mainSettings.fieldNoteSheetName === '' ? "Select Field Note File"  : props.mainSettings.fieldNoteSheetName} `}</label>
                             <input
                                 className='file-picker '
