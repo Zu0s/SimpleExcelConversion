@@ -40,9 +40,9 @@ body {
   padding: 10px;
   color: #EDF1FB;
   border: 1px solid;
-  border-color: #706E6C;
+  border-color: #0B3FB6;
   border-radius: 10px;
-  box-shadow: 2px 2px 1px #706E6C;
+  box-shadow: 2px 2px 1px #0B3FB6;
 }
 
 [data-tooltip]:hover::before {
@@ -50,7 +50,7 @@ body {
   opacity: 1;
   font-size: 1.125rem;
   /* customizable */
-  background: #292524;
+  background: #000C47;
   margin-top: -50px;
   margin-left: 10px;
 }
@@ -65,9 +65,9 @@ input[type= 'checkbox'] {
   -webkit-appearance:none;
   width: 2rem;
   height: 2rem;
-  background: #1B1917;
+  background: #000C47;
   border-radius: 5px;
-  border: 2px solid #706E6C;
+  border: 2px solid #0B3FB6;
   position: relative;
 }
 
