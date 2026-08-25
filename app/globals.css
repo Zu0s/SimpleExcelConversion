@@ -3,8 +3,9 @@
 @tailwind utilities;
 
 :root {
-  --foreground: #00132C;
+  --foreground: #EDF1FB;
   --textColor: #EDF1FB;
+  --background: linear-gradient(90deg, #000816 0%, #003399 50%, #000816 100%);
 }
 
 input::-webkit-outer-spin-button,
@@ -15,8 +16,8 @@ input::-webkit-inner-spin-button {
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: linear-gradient(217deg,rgba(0, 46, 232, 1) 0%, rgba(0, 12, 71, 1) 50%, rgba(0, 46, 232, 1) 100%);;
-    --foreground: #0B3FB6;
+    --background: linear-gradient(90deg, #000816 0%, #003399 50%, #000816 100%);
+    --foreground: #EDF1FB;
   }
 }
 
@@ -66,7 +67,7 @@ input[type= 'checkbox'] {
   width: 2rem;
   height: 2rem;
   background: #000C47;
-  border-radius: 5px;
+  border-radius: 10px;
   border: 2px solid #0B3FB6;
   position: relative;
 }

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { shittyDb } from '../keys'
-import { techButtonStyles } from '../groupedStyles';
+import { techButtonStyles, disabledTechButtonStyles, panelStyles } from '../groupedStyles';
 import Select, { StylesConfig } from 'react-select';
 import * as XLSX from 'xlsx';
 import { ConsoleConstructorOptions } from 'console';
@@ -143,6 +143,7 @@ export default function FileImporter(props: any) {
             borderColor: '#0B3FB6',
             borderWidth: 2,
             borderStyle: 'solid',
+            borderRadius: 12,
             boxShadow: 'none',
             padding: '0.3rem',
             ':hover': { borderColor: '#0B3FB6', borderWidth: 2, borderStyle: 'solid' },
@@ -160,7 +161,7 @@ export default function FileImporter(props: any) {
             }
         },
         noOptionsMessage: (styles) => ({ ...styles, backgroundColor: '#000C47', color:'#EDF1FB'}),
-        menu: (styles) => ({ ...styles, backgroundColor: '#000C47', border: '2px solid #0B3FB6'}),
+        menu: (styles) => ({ ...styles, backgroundColor: '#000C47', border: '2px solid #0B3FB6', borderRadius: 12 }),
         menuList: (styles) => ({
             ...styles,
            "::-webkit-scrollbar": { width: "9px" },
@@ -181,14 +182,14 @@ export default function FileImporter(props: any) {
 
     return(
         <div 
-            className='flex flex-col min-h-full w-full rounded-md font-[family-name:var(--font-geist-sans)]'
+            className='flex flex-col min-h-full w-full font-[family-name:var(--font-geist-sans)]'
             id='file-importer--main'
             onDragEnter={handleDragEnter}    
             onDragOver={handleDragOver}
             onDragLeave={handleDragLeave}
         >
 
-            <div className={`flex ${ props.mainSettings.sheetName !== '' || props.mainSettings.fieldNoteSheetName !== '' ? 'flex-row gap-4 ': 'flex-col ' } justify-between self-center mx-5 my-3` }>
+            <div className={`flex ${ props.mainSettings.sheetName !== '' || props.mainSettings.fieldNoteSheetName !== '' ? 'flex-row gap-4 ': 'flex-col gap-4 ' } p-4 justify-between self-center w-full` }>
                 { props.mainSettings.sheetName !== '' || props.mainSettings.fieldNoteSheetName !== '' ? null : <p className={`file-importer--text ${isDragging === true ? 'allowChildDragging' : ''} text-5xl self-center justify-self-center`}>Select Files Below</p> }
                 
                 <div className={` flex ${ props.mainSettings.sheetName !== '' || props.mainSettings.fieldNoteSheetName !== '' ? 'flex-col': 'flex-row gap-4 mt-2'} `}>
@@ -210,7 +211,7 @@ export default function FileImporter(props: any) {
                     </input>
             
                     <div className={ ` ${props.mainSettings.sheetName  !== '' || props.mainSettings.fieldNoteSheetName !== '' ? 'mt-2' : null} flex`}>
-                        <label className={`  ${props.mainSettings.fieldNoteSheetName === '' ? `${techButtonStyles} text-xl w-fit`  : 'text-3xl'} ${props.mainSettings.newGroup ? 'pointer-events-none text-[#a5a8b1]' : ''} cursor-pointer `}  htmlFor='fieldNote-importer'>{` ${props.mainSettings.fieldNoteSheetName === '' ? "Select Field Note File"  : props.mainSettings.fieldNoteSheetName} `}</label>
+                        <label className={`  ${props.mainSettings.newGroup ? `${disabledTechButtonStyles} text-xl w-fit` : props.mainSettings.fieldNoteSheetName === '' ? `${techButtonStyles} text-xl w-fit`  : 'text-3xl'} cursor-pointer `}  htmlFor='fieldNote-importer'>{` ${props.mainSettings.fieldNoteSheetName === '' ? "Select Field Note File"  : props.mainSettings.fieldNoteSheetName} `}</label>
                             <input
                                 className='file-picker '
                                 id='fieldNote-importer'
@@ -243,14 +244,14 @@ export default function FileImporter(props: any) {
                 }
             </div>
             {props.mainSettings.sheetName !== '' || props.mainSettings.fieldNoteSheetName !== '' ?
-                <div className='flex flex-col gap-2 text-2xl px-5 border-t-4 border-[#0B3FB6] pt-2'>
+                <div className={`${panelStyles} p-5 flex flex-col gap-4 text-2xl`}>
 
-                    <h1 className=' w-fit text-3xl mb-2 border-b-2 border-bottom border-[#0B3FB6]'>Modifications</h1>
+                    <h1 className=' w-fit text-3xl'>Modifications</h1>
                     <div>    
                         <label className='modification-subTitle'>Group # </label>
                         <input 
                             onWheel={(e) => (e.target as HTMLInputElement).blur()}
-                            className='bg-[#000C47] border-[2px] border-[#0B3FB6] p-2 px-8 focus:outline-hidden outline-none w-full rounded-sm text-[#EDF1FB]'
+                            className='bg-[#000C47] border-[2px] border-[#0B3FB6] p-2 px-8 focus:outline-hidden outline-none w-full rounded-xl text-[#EDF1FB]'
                             type='number'
                             name='groupNumber'
                             onChange={handleInputChange}
@@ -260,7 +261,7 @@ export default function FileImporter(props: any) {
                     <div>
                         <label className='modification-subTitle'>Company </label>
                         <input 
-                            className='bg-[#000C47] border-[2px] border-[#0B3FB6] p-2 px-8 focus:outline-hidden outline-none w-full rounded-sm text-[#EDF1FB]'
+                            className='bg-[#000C47] border-[2px] border-[#0B3FB6] p-2 px-8 focus:outline-hidden outline-none w-full rounded-xl text-[#EDF1FB]'
                             type='text'
                             name='company'
                             onChange={handleInputChange}
