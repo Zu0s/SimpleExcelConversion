@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Modal from './components/Modal';
+import SettingsModal from './components/SettingsModal';
 import FileImporter from './components/FileImporter';
 import { shittyDb } from './keys';
 import { techButtonStyles, disabledTechButtonStyles, panelStyles, pageGradientStyles } from './groupedStyles';
@@ -40,6 +41,7 @@ export default function Home() {
     const [isOpen, setIsOpen] = useState(false)
 
     const [navIsOpen, setNavIsOpen] = useState(false)
+    const [settingsModalIsOpen, setSettingsModalIsOpen] = useState(false)
 
     /* Handles Password */
     const [passInput, setPassInput] = useState<string>('')
@@ -77,6 +79,11 @@ export default function Home() {
         })
     }
 
+    function handleOpenSettings() {
+        setNavIsOpen(false)
+        setSettingsModalIsOpen(true)
+    }
+
     /* Functions */    
     function handlePassInputChange(e: any){
         const {value} = e.target
@@ -109,6 +116,7 @@ export default function Home() {
     }
 
     function handleSignOut() {
+        setNavIsOpen(false)
         window.localStorage.removeItem('tempPass')
         return window.location.reload();
     }
@@ -585,18 +593,19 @@ export default function Home() {
             <nav id='Nav' className={`mx-4 mt-4 ${panelStyles} px-6 py-4 flex flex-row justify-between relative`}>
                 <h1 className='text-4xl self-center text-[#EDF1FB]'>Simple Excel Conversion</h1>
                 <div className='overflow-visible text-center relative'>
-                    <button className={`bg-[#000C47] border-2 border-[#0B3FB6] ${ navIsOpen ? ' rounded-t-xl ' : 'rounded-xl hover:border-[#002EE8]' }  text-xl p-3 px-5 `} onClick={handleNavIsOpen}>{userButtonText} </button>
+                    <button className={`bg-[#000C47] border-2 border-[#0B3FB6] rounded-xl hover:border-[#002EE8] text-xl p-3 px-5 `} onClick={handleNavIsOpen}>{userButtonText} </button>
                     {  !navIsOpen ? null
                     : 
-                        <div className={`relative flex flex-col ${panelStyles} text-lg px-2 `}>
-                            <button data-tooltip={`Future`} className='text-[#EDF1FB] mt-2' disabled>Settings</button>
-                            <button className='mb-2' onClick={handleSignOut}>Sign Out</button>
+                        <div className={`absolute right-0 top-full mt-2 z-20 ${panelStyles} flex flex-col p-2 min-w-full text-[#EDF1FB] font-[family-name:var(--font-geist-sans)]`}>
+                            <button className='text-xl px-4 py-3 rounded-xl hover:bg-[#093390] text-left whitespace-nowrap' onClick={handleOpenSettings}>Settings</button>
+                            <button className='text-xl px-4 py-3 rounded-xl hover:bg-[#093390] text-left whitespace-nowrap' onClick={handleSignOut}>Sign Out</button>
                         </div>
                     }
                 </div>
             </nav>
             <div id='Body' className='min-w-[50%] flex-1 px-4 py-4'>
                 <Modal isOpen={isOpen} setIsOpen={setIsOpen} mainSettings={mainSettings} userSettings={userSettings}/>
+                <SettingsModal isOpen={settingsModalIsOpen} setIsOpen={setSettingsModalIsOpen}/>
                 <div className={`${panelStyles} p-6 min-h-[25%] min-w-[55%] justify-self-center mx-auto ${mainSettings.sheetName === '' || mainSettings.fieldNoteSheetName === '' ? 'content-center' : ''}`}>
                     <FileImporter defaultMainSettings={defaultMainSettings} mainSettings={mainSettings} setMainSettings={setMainSettings} workbook={workbook} setWorkbook={setWorkbook} fielfieldNoteSheet={fieldNoteSheet} setFieldNoteSheet={setFieldNoteSheet} userSettings={userSettings}/>
         
