@@ -84,3 +84,43 @@ input[type='checkbox']:checked:after {
   transform: translate(-50%,-50%);
 }
 
+@media (min-width: 768px) and (max-width: 1023px) {
+  .modifications-panel > :last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+  }
+
+  .modifications-spheres .sec-select__control {
+    min-height: 0 !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+  }
+
+  .modifications-spheres .sec-select__value-container {
+    padding-top: 2px !important;
+    padding-bottom: 2px !important;
+  }
+
+  .modifications-spheres .sec-select__menu-list {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+  }
+
+  .modifications-spheres .sec-select__input-container,
+  .modifications-spheres .sec-select__input,
+  .modifications-spheres .sec-select__placeholder {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .modifications-spheres .sec-select__input-container::before,
+  .modifications-spheres .sec-select__input::before,
+  .modifications-spheres .sec-select__placeholder::before {
+    display: none !important;
+    content: none !important;
+    width: 0 !important;
+    height: 0 !important;
+    margin: 0 !important;
+  }
+}
+
