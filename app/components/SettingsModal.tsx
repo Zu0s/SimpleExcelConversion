@@ -3,35 +3,10 @@
 import { useEffect, useState } from 'react';
 import { Button, Dialog, DialogPanel, DialogTitle } from '@headlessui/react'
 import { panelStyles, techButtonStyles } from '../groupedStyles'
+import { cloneSettings, type UserSettingsKey } from '../userSettingsStorage'
 
-export type UserSettingsKey = {
-  openLogAfterConvert: boolean,
-  alternateName: {
-    useCompanyName: boolean,
-    extraText: string,
-    extraTextAtFront: boolean
-  }
-}
-
-export const defaultUserSettings: UserSettingsKey = {
-  openLogAfterConvert: true,
-  alternateName: {
-    useCompanyName: false,
-    extraText: '',
-    extraTextAtFront: false
-  }
-}
-
-function cloneSettings(settings: UserSettingsKey | undefined): UserSettingsKey {
-  return {
-    openLogAfterConvert: settings?.openLogAfterConvert ?? defaultUserSettings.openLogAfterConvert,
-    alternateName: {
-      useCompanyName: settings?.alternateName?.useCompanyName ?? false,
-      extraText: settings?.alternateName?.extraText ?? '',
-      extraTextAtFront: settings?.alternateName?.extraTextAtFront ?? false
-    }
-  }
-}
+export type { UserSettingsKey } from '../userSettingsStorage'
+export { defaultUserSettings, cloneSettings } from '../userSettingsStorage'
 
 export default function SettingsModal(props: {
   isOpen: boolean,
@@ -75,26 +50,48 @@ export default function SettingsModal(props: {
                 checked={draft.openLogAfterConvert}
                 onChange={(e) => setDraft((prev) => ({ ...prev, openLogAfterConvert: e.target.checked }))}
               />
-              Show the log after I convert
-            </label>
-            <p className="text-xl -mt-4 ml-11">
-              On = always. Off = only if there is a problem.
-            </p>
-
-            <label className="flex flex-row items-center gap-3 text-2xl cursor-pointer">
-              <input
-                type="checkbox"
-                checked={draft.alternateName.useCompanyName}
-                onChange={(e) => setDraft((prev) => ({
-                  ...prev,
-                  alternateName: { ...prev.alternateName, useCompanyName: e.target.checked }
-                }))}
-              />
-              Use company name as the file name
+              Always Show Log
             </label>
 
-            <div className="flex flex-col gap-2">
-              <label className="text-2xl" htmlFor="settings-extra-text">Extra text</label>
+            <div className={`${panelStyles} p-5 flex flex-col gap-4`}>
+              <h2 className="text-3xl">Alternative Download Name</h2>
+
+              <label className="flex flex-row items-center gap-3 text-2xl cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={draft.alternateName.useCompanyName}
+                  onChange={(e) => setDraft((prev) => ({
+                    ...prev,
+                    alternateName: { ...prev.alternateName, useCompanyName: e.target.checked }
+                  }))}
+                />
+                Use Company Name
+              </label>
+
+              <div className="flex flex-row items-center gap-3 flex-wrap">
+                <p className="text-2xl">extra text</p>
+                <button
+                  type="button"
+                  className={draft.alternateName.extraTextAtFront ? techButtonStyles : toggleIdle}
+                  onClick={() => setDraft((prev) => ({
+                    ...prev,
+                    alternateName: { ...prev.alternateName, extraTextAtFront: true }
+                  }))}
+                >
+                  Front
+                </button>
+                <button
+                  type="button"
+                  className={!draft.alternateName.extraTextAtFront ? techButtonStyles : toggleIdle}
+                  onClick={() => setDraft((prev) => ({
+                    ...prev,
+                    alternateName: { ...prev.alternateName, extraTextAtFront: false }
+                  }))}
+                >
+                  Back
+                </button>
+              </div>
+
               <input
                 id="settings-extra-text"
                 className="bg-[#000C47] border-2 border-[#0B3FB6] p-2 px-4 focus:outline-hidden outline-none w-full rounded-xl text-2xl text-[#EDF1FB]"
@@ -105,30 +102,6 @@ export default function SettingsModal(props: {
                   alternateName: { ...prev.alternateName, extraText: e.target.value }
                 }))}
               />
-            </div>
-
-            <div className="flex flex-row items-center gap-3">
-              <p className="text-2xl">Extra text</p>
-              <button
-                type="button"
-                className={draft.alternateName.extraTextAtFront ? techButtonStyles : toggleIdle}
-                onClick={() => setDraft((prev) => ({
-                  ...prev,
-                  alternateName: { ...prev.alternateName, extraTextAtFront: true }
-                }))}
-              >
-                Front
-              </button>
-              <button
-                type="button"
-                className={!draft.alternateName.extraTextAtFront ? techButtonStyles : toggleIdle}
-                onClick={() => setDraft((prev) => ({
-                  ...prev,
-                  alternateName: { ...prev.alternateName, extraTextAtFront: false }
-                }))}
-              >
-                Back
-              </button>
             </div>
 
             <div className="mt-2 flex justify-center">

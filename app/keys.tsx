@@ -20,7 +20,7 @@ interface UserObject {
 }
 
 export const shittyDb:{[index: string]: any, users: Array<{[key: string]: any, user: string, password: string }>, billButkovich: UserObject } = {
-    users: [{ user: 'billButkovich', password: 'bbyb1873'}, { user: 'steveRemmels', password: 'tempstevepass'}],
+    users: [{ user: 'billButkovich', password: 'bbyb1873'}, { user: 'steveRemmels', password: 'tempstevepass'}, { user: 'guest', password: 'guest' }],
     billButkovich: {
         userPref: {
             refferalSourcePref: [],

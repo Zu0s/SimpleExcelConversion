@@ -8,6 +8,7 @@ import FileImporter from './components/FileImporter';
 import { shittyDb } from './keys';
 import { techButtonStyles, disabledTechButtonStyles, panelStyles, pageGradientStyles } from './groupedStyles';
 import { buildDownloadFileName } from './downloadFileName';
+import { persistUserSettings, settingsForLogin } from './userSettingsStorage';
 
 import * as XLSX from 'xlsx'
 
@@ -106,7 +107,8 @@ export default function Home() {
                 return ({ // allow access
                     ...shittyDb[foundUser.user],
                     password: foundUser.password,
-                    user: foundUser.user
+                    user: foundUser.user,
+                    settings: settingsForLogin(foundUser.user)
                 })
             })
             // console.log(userSettings)
@@ -617,7 +619,10 @@ export default function Home() {
                     isOpen={settingsModalIsOpen}
                     setIsOpen={setSettingsModalIsOpen}
                     settings={userSettings.settings}
-                    onSave={(settings) => setUserSettings((prevUserSettings: any) => ({ ...prevUserSettings, settings }))}
+                    onSave={(settings) => {
+                        persistUserSettings(userSettings.user, settings)
+                        setUserSettings((prevUserSettings: any) => ({ ...prevUserSettings, settings }))
+                    }}
                 />
                 <SignOutConfirm
                     isOpen={signOutConfirmIsOpen}
