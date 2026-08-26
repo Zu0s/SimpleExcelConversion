@@ -3,35 +3,10 @@
 import { useEffect, useState } from 'react';
 import { Button, Dialog, DialogPanel, DialogTitle } from '@headlessui/react'
 import { panelStyles, techButtonStyles } from '../groupedStyles'
+import { cloneSettings, type UserSettingsKey } from '../userSettingsStorage'
 
-export type UserSettingsKey = {
-  openLogAfterConvert: boolean,
-  alternateName: {
-    useCompanyName: boolean,
-    extraText: string,
-    extraTextAtFront: boolean
-  }
-}
-
-export const defaultUserSettings: UserSettingsKey = {
-  openLogAfterConvert: true,
-  alternateName: {
-    useCompanyName: false,
-    extraText: '',
-    extraTextAtFront: false
-  }
-}
-
-function cloneSettings(settings: UserSettingsKey | undefined): UserSettingsKey {
-  return {
-    openLogAfterConvert: settings?.openLogAfterConvert ?? defaultUserSettings.openLogAfterConvert,
-    alternateName: {
-      useCompanyName: settings?.alternateName?.useCompanyName ?? false,
-      extraText: settings?.alternateName?.extraText ?? '',
-      extraTextAtFront: settings?.alternateName?.extraTextAtFront ?? false
-    }
-  }
-}
+export type { UserSettingsKey } from '../userSettingsStorage'
+export { defaultUserSettings, cloneSettings } from '../userSettingsStorage'
 
 export default function SettingsModal(props: {
   isOpen: boolean,
