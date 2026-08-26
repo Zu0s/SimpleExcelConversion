@@ -81,6 +81,7 @@ export default function Home() {
     function closeUserDropdown() {
         setNavIsOpen(false)
         setSettingsInDropdown(false)
+        setSignOutConfirmIsOpen(false)
     }
 
     function handleNavIsOpen () {
@@ -90,16 +91,19 @@ export default function Home() {
         }
         setNavIsOpen(true)
         setSettingsInDropdown(false)
+        setSignOutConfirmIsOpen(false)
     }
 
     function handleOpenSettings() {
+        setSignOutConfirmIsOpen(false)
         setSettingsInDropdown(true)
         setNavIsOpen(true)
     }
 
     function requestSignOut() {
-        closeUserDropdown()
+        setSettingsInDropdown(false)
         setSignOutConfirmIsOpen(true)
+        setNavIsOpen(true)
     }
 
     /* Functions */    
@@ -626,7 +630,7 @@ export default function Home() {
                     <button className={`bg-[#000C47] border-2 border-[#0B3FB6] rounded-xl hover:border-[#002EE8] text-xl p-3 px-5 `} onClick={handleNavIsOpen}>{userButtonText} </button>
                     {  !navIsOpen ? null
                     : 
-                        <div className={`absolute right-0 top-full mt-2 z-20 ${panelStyles} flex flex-col text-[#EDF1FB] font-[family-name:var(--font-geist-sans)] ${settingsInDropdown ? 'p-8 min-w-[24rem] w-[min(32rem,calc(100vw-2rem))]' : 'p-2 min-w-full'}`}>
+                        <div className={`absolute right-0 top-full mt-2 z-20 ${panelStyles} flex flex-col text-[#EDF1FB] font-[family-name:var(--font-geist-sans)] ${settingsInDropdown ? 'p-8 min-w-[24rem] w-[min(32rem,calc(100vw-2rem))]' : signOutConfirmIsOpen ? 'p-8 min-w-[22rem] w-[min(28rem,calc(100vw-2rem))]' : 'p-2 min-w-full'}`}>
                             {settingsInDropdown ?
                                 <SettingsModal
                                     settings={userSettings.settings}
@@ -635,6 +639,11 @@ export default function Home() {
                                         setUserSettings((prevUserSettings: any) => ({ ...prevUserSettings, settings }))
                                         closeUserDropdown()
                                     }}
+                                />
+                            : signOutConfirmIsOpen ?
+                                <SignOutConfirm
+                                    onCancel={closeUserDropdown}
+                                    onConfirm={handleSignOut}
                                 />
                             :
                                 <>
@@ -648,11 +657,6 @@ export default function Home() {
             </nav>
             <div id='Body' className='min-w-[50%] flex-1 px-4 py-4'>
                 <Modal isOpen={isOpen} setIsOpen={setIsOpen} mainSettings={mainSettings} userSettings={userSettings}/>
-                <SignOutConfirm
-                    isOpen={signOutConfirmIsOpen}
-                    onCancel={() => setSignOutConfirmIsOpen(false)}
-                    onConfirm={handleSignOut}
-                />
                 <div className={`${panelStyles} p-6 min-h-[25%] min-w-[55%] justify-self-center mx-auto ${mainSettings.sheetName === '' || mainSettings.fieldNoteSheetName === '' ? 'content-center' : ''}`}>
                     <FileImporter defaultMainSettings={defaultMainSettings} mainSettings={mainSettings} setMainSettings={setMainSettings} workbook={workbook} setWorkbook={setWorkbook} fielfieldNoteSheet={fieldNoteSheet} setFieldNoteSheet={setFieldNoteSheet} userSettings={userSettings}/>
         
