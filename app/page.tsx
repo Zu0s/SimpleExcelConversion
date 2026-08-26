@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Modal from './components/Modal';
 import SettingsModal from './components/SettingsModal';
 import SignOutConfirm from './components/SignOutConfirm';
@@ -44,8 +44,9 @@ export default function Home() {
     const [isOpen, setIsOpen] = useState(false)
 
     const [navIsOpen, setNavIsOpen] = useState(false)
-    const [settingsModalIsOpen, setSettingsModalIsOpen] = useState(false)
+    const [settingsInDropdown, setSettingsInDropdown] = useState(false)
     const [signOutConfirmIsOpen, setSignOutConfirmIsOpen] = useState(false)
+    const userMenuRef = useRef<HTMLDivElement>(null)
 
     /* Handles Password */
     const [passInput, setPassInput] = useState<string>('')
@@ -77,19 +78,27 @@ export default function Home() {
         } )    
     }
 
+    function closeUserDropdown() {
+        setNavIsOpen(false)
+        setSettingsInDropdown(false)
+    }
+
     function handleNavIsOpen () {
-        return setNavIsOpen((prevState: boolean) => {
-            return (!prevState)
-        })
+        if (navIsOpen) {
+            closeUserDropdown()
+            return
+        }
+        setNavIsOpen(true)
+        setSettingsInDropdown(false)
     }
 
     function handleOpenSettings() {
-        setNavIsOpen(false)
-        setSettingsModalIsOpen(true)
+        setSettingsInDropdown(true)
+        setNavIsOpen(true)
     }
 
     function requestSignOut() {
-        setNavIsOpen(false)
+        closeUserDropdown()
         setSignOutConfirmIsOpen(true)
     }
 
@@ -143,6 +152,17 @@ export default function Home() {
             checkPass(userPref)
         }
     }, [])
+
+    useEffect(() => {
+        if (!navIsOpen) return
+        function onPointerDown(event: MouseEvent) {
+            if (userMenuRef.current && !userMenuRef.current.contains(event.target as Node)) {
+                closeUserDropdown()
+            }
+        }
+        document.addEventListener('mousedown', onPointerDown)
+        return () => document.removeEventListener('mousedown', onPointerDown)
+    }, [navIsOpen])
   /* Handle Sheet Functions */
 
     function convertSheet() {
@@ -602,28 +622,32 @@ export default function Home() {
         {/* Main View */}    
             <nav id='Nav' className={`mx-4 mt-4 ${panelStyles} px-6 py-4 flex flex-row justify-between relative`}>
                 <h1 className='text-4xl self-center text-[#EDF1FB]'>Simple Excel Conversion</h1>
-                <div className='overflow-visible text-center relative'>
+                <div className='overflow-visible text-center relative' ref={userMenuRef}>
                     <button className={`bg-[#000C47] border-2 border-[#0B3FB6] rounded-xl hover:border-[#002EE8] text-xl p-3 px-5 `} onClick={handleNavIsOpen}>{userButtonText} </button>
                     {  !navIsOpen ? null
                     : 
-                        <div className={`absolute right-0 top-full mt-2 z-20 ${panelStyles} flex flex-col p-2 min-w-full text-[#EDF1FB] font-[family-name:var(--font-geist-sans)]`}>
-                            <button className='text-xl px-4 py-3 rounded-xl hover:bg-[#093390] text-left whitespace-nowrap' onClick={handleOpenSettings}>Settings</button>
-                            <button className='text-xl px-4 py-3 rounded-xl hover:bg-[#093390] text-left whitespace-nowrap' onClick={requestSignOut}>Sign Out</button>
+                        <div className={`absolute right-0 top-full mt-2 z-20 ${panelStyles} flex flex-col text-[#EDF1FB] font-[family-name:var(--font-geist-sans)] ${settingsInDropdown ? 'p-8 min-w-[24rem] w-[min(32rem,calc(100vw-2rem))]' : 'p-2 min-w-full'}`}>
+                            {settingsInDropdown ?
+                                <SettingsModal
+                                    settings={userSettings.settings}
+                                    onSave={(settings) => {
+                                        persistUserSettings(userSettings.user, settings)
+                                        setUserSettings((prevUserSettings: any) => ({ ...prevUserSettings, settings }))
+                                        closeUserDropdown()
+                                    }}
+                                />
+                            :
+                                <>
+                                    <button className='text-xl px-4 py-3 rounded-xl hover:bg-[#093390] text-left whitespace-nowrap' onClick={handleOpenSettings}>Settings</button>
+                                    <button className='text-xl px-4 py-3 rounded-xl hover:bg-[#093390] text-left whitespace-nowrap' onClick={requestSignOut}>Sign Out</button>
+                                </>
+                            }
                         </div>
                     }
                 </div>
             </nav>
             <div id='Body' className='min-w-[50%] flex-1 px-4 py-4'>
                 <Modal isOpen={isOpen} setIsOpen={setIsOpen} mainSettings={mainSettings} userSettings={userSettings}/>
-                <SettingsModal
-                    isOpen={settingsModalIsOpen}
-                    setIsOpen={setSettingsModalIsOpen}
-                    settings={userSettings.settings}
-                    onSave={(settings) => {
-                        persistUserSettings(userSettings.user, settings)
-                        setUserSettings((prevUserSettings: any) => ({ ...prevUserSettings, settings }))
-                    }}
-                />
                 <SignOutConfirm
                     isOpen={signOutConfirmIsOpen}
                     onCancel={() => setSignOutConfirmIsOpen(false)}
