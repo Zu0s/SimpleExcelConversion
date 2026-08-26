@@ -624,13 +624,19 @@ export default function Home() {
         :
         <div  className={`${isOpen === true ? 'blur-sm': ''} min-h-screen flex flex-col flex-1 ${pageGradientStyles} font-[family-name:var(--font-geist-sans)]`}>
         {/* Main View */}    
-            <nav id='Nav' className={`mx-4 mt-4 ${panelStyles} px-6 py-4 flex flex-row justify-between relative`}>
-                <h1 className='text-4xl self-center text-[#EDF1FB]'>Simple Excel Conversion</h1>
-                <div className='overflow-visible text-center relative' ref={userMenuRef}>
-                    <button className={`bg-[#000C47] border-2 border-[#0B3FB6] rounded-xl hover:border-[#002EE8] text-xl p-3 px-5 `} onClick={handleNavIsOpen}>{userButtonText} </button>
+            <nav id='Nav' className="mx-4 mt-4 flex flex-row items-stretch gap-2">
+                <div className={`${panelStyles} flex flex-1 items-center px-6 py-4 min-w-0`}>
+                    <h1 className='text-4xl text-[#EDF1FB]'>Simple Excel Conversion</h1>
+                </div>
+                <div className='relative overflow-visible shrink-0 self-stretch' ref={userMenuRef}>
+                    <button
+                        type="button"
+                        className={`${panelStyles} h-full px-6 text-xl text-[#EDF1FB] hover:bg-[#093390] cursor-pointer flex items-center justify-center whitespace-nowrap`}
+                        onClick={handleNavIsOpen}
+                    >{userButtonText}</button>
                     {  !navIsOpen ? null
                     : 
-                        <div className={`absolute right-0 top-full mt-2 z-20 ${panelStyles} flex flex-col text-[#EDF1FB] font-[family-name:var(--font-geist-sans)] ${settingsInDropdown ? 'p-8 min-w-[24rem] w-[min(32rem,calc(100vw-2rem))]' : signOutConfirmIsOpen ? 'p-8 min-w-[22rem] w-[min(28rem,calc(100vw-2rem))]' : 'p-2 min-w-full'}`}>
+                        <div className={`absolute top-full mt-2 right-0 z-20 ${panelStyles} flex flex-col text-[#EDF1FB] font-[family-name:var(--font-geist-sans)] ${settingsInDropdown ? 'p-8 min-w-[24rem] w-[min(32rem,calc(100vw-2rem))]' : signOutConfirmIsOpen ? 'p-8 min-w-[22rem] w-[min(28rem,calc(100vw-2rem))]' : 'p-2 min-w-full'}`}>
                             {settingsInDropdown ?
                                 <SettingsModal
                                     settings={userSettings.settings}
@@ -647,8 +653,8 @@ export default function Home() {
                                 />
                             :
                                 <>
-                                    <button className='text-xl px-4 py-3 rounded-xl hover:bg-[#093390] text-left whitespace-nowrap' onClick={handleOpenSettings}>Settings</button>
-                                    <button className='text-xl px-4 py-3 rounded-xl hover:bg-[#093390] text-left whitespace-nowrap' onClick={requestSignOut}>Sign Out</button>
+                                    <button className='text-xl px-4 py-3 rounded-xl hover:bg-[#093390] text-left whitespace-nowrap cursor-pointer' onClick={handleOpenSettings}>Settings</button>
+                                    <button className='text-xl px-4 py-3 rounded-xl hover:bg-[#093390] text-left whitespace-nowrap cursor-pointer' onClick={requestSignOut}>Sign Out</button>
                                 </>
                             }
                         </div>
