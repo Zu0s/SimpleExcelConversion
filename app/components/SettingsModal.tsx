@@ -54,6 +54,7 @@ export default function SettingsModal(props: {
             <label className="mt-6 flex flex-row items-center gap-3 text-2xl cursor-pointer">
               <input
                 type="checkbox"
+                className="cursor-pointer"
                 checked={draft.openLogAfterConvert}
                 onChange={(e) => setDraft((prev) => ({ ...prev, openLogAfterConvert: e.target.checked }))}
               />
@@ -66,6 +67,7 @@ export default function SettingsModal(props: {
               <label className="flex flex-row items-center gap-3 text-2xl cursor-pointer">
                 <input
                   type="checkbox"
+                  className="cursor-pointer"
                   checked={draft.alternateName.useCompanyName}
                   onChange={(e) => setDraft((prev) => ({
                     ...prev,
@@ -78,7 +80,7 @@ export default function SettingsModal(props: {
               <div className="flex flex-row items-center gap-3 flex-wrap">
                 <p className="text-2xl">extra text</p>
                 <div
-                  className="relative inline-grid grid-cols-2 rounded-full border-2 border-[#0B3FB6] bg-[#000C47]"
+                  className="relative inline-grid grid-cols-2 rounded-full border-2 border-[#0B3FB6] bg-[#000C47] cursor-pointer"
                   role="group"
                   aria-label="Extra text position"
                 >
@@ -90,7 +92,7 @@ export default function SettingsModal(props: {
                   />
                   <button
                     type="button"
-                    className="relative z-10 px-5 py-2.5 text-2xl font-semibold text-[#EDF1FB]"
+                    className="relative z-10 px-5 py-2.5 text-2xl font-semibold text-[#EDF1FB] cursor-pointer"
                     aria-pressed={extraAtFront}
                     onClick={() => setExtraTextAtFront(true)}
                   >
@@ -98,7 +100,7 @@ export default function SettingsModal(props: {
                   </button>
                   <button
                     type="button"
-                    className="relative z-10 px-5 py-2.5 text-2xl font-semibold text-[#EDF1FB]"
+                    className="relative z-10 px-5 py-2.5 text-2xl font-semibold text-[#EDF1FB] cursor-pointer"
                     aria-pressed={!extraAtFront}
                     onClick={() => setExtraTextAtFront(false)}
                   >
