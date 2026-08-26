@@ -8,7 +8,15 @@ interface UserObject {
     },
     excelHeaders: Object,
     referralSourceOptions: {value: String, label: String, color?: String}[],
-    spheresOptions: {value: String, label: String, color?: String}[]
+    spheresOptions: {value: String, label: String, color?: String}[],
+    settings: {
+        openLogAfterConvert: boolean,
+        alternateName: {
+            useCompanyName: boolean,
+            extraText: string,
+            extraTextAtFront: boolean
+        }
+    }
 }
 
 export const shittyDb:{[index: string]: any, users: Array<{[key: string]: any, user: string, password: string }>, billButkovich: UserObject } = {
@@ -133,7 +141,15 @@ export const shittyDb:{[index: string]: any, users: Array<{[key: string]: any, u
             {value: 'Spanish', label: 'Spanish', color: '#a5a8b1'},
             {value: 'Tech', label: 'Tech', color: '#a5a8b1'},
             {value: 'Utilities', label: 'Utilities', color: '#a5a8b1'}
-        ]
+        ],
+        settings: {
+            openLogAfterConvert: true,
+            alternateName: {
+                useCompanyName: false,
+                extraText: '',
+                extraTextAtFront: false
+            }
+        }
     },
     guest: {
         userPref: {
@@ -254,7 +270,15 @@ export const shittyDb:{[index: string]: any, users: Array<{[key: string]: any, u
             {value: 'Spanish', label: 'Spanish', color: '#FF5100'},
             {value: 'Tech', label: 'Tech', color: '#FF5100'},
             {value: 'Utilities', label: 'Utilities', color: '#FF5100'}
-        ]
+        ],
+        settings: {
+            openLogAfterConvert: true,
+            alternateName: {
+                useCompanyName: false,
+                extraText: '',
+                extraTextAtFront: false
+            }
+        }
     },
 
 }
@@ -324,7 +348,15 @@ export const shittyDb:{[index: string]: any, users: Array<{[key: string]: any, u
 //         {value: 'Associate - Past', label: 'Associate - Past', color: '#FF5100'},
 //         {value: 'Associate Prospects', label: 'Associate Prospects', color: '#FF5100'},
 //         {value: 'Association', label: 'Association', color: '#FF5100'},
-//     ]
+//     ],
+//     settings: {
+//         openLogAfterConvert: true,
+//         alternateName: {
+//             useCompanyName: false,
+//             extraText: '',
+//             extraTextAtFront: false
+//         }
+//     }
 // }
 
 /* LOOKS LIKE REMOVE */

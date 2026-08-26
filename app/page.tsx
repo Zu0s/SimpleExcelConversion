@@ -3,9 +3,11 @@
 import { useState, useEffect } from 'react';
 import Modal from './components/Modal';
 import SettingsModal from './components/SettingsModal';
+import SignOutConfirm from './components/SignOutConfirm';
 import FileImporter from './components/FileImporter';
 import { shittyDb } from './keys';
 import { techButtonStyles, disabledTechButtonStyles, panelStyles, pageGradientStyles } from './groupedStyles';
+import { buildDownloadFileName } from './downloadFileName';
 
 import * as XLSX from 'xlsx'
 
@@ -42,6 +44,7 @@ export default function Home() {
 
     const [navIsOpen, setNavIsOpen] = useState(false)
     const [settingsModalIsOpen, setSettingsModalIsOpen] = useState(false)
+    const [signOutConfirmIsOpen, setSignOutConfirmIsOpen] = useState(false)
 
     /* Handles Password */
     const [passInput, setPassInput] = useState<string>('')
@@ -84,6 +87,11 @@ export default function Home() {
         setSettingsModalIsOpen(true)
     }
 
+    function requestSignOut() {
+        setNavIsOpen(false)
+        setSignOutConfirmIsOpen(true)
+    }
+
     /* Functions */    
     function handlePassInputChange(e: any){
         const {value} = e.target
@@ -116,7 +124,7 @@ export default function Home() {
     }
 
     function handleSignOut() {
-        setNavIsOpen(false)
+        setSignOutConfirmIsOpen(false)
         window.localStorage.removeItem('tempPass')
         return window.location.reload();
     }
@@ -537,7 +545,7 @@ export default function Home() {
         /* Move sheet to state*/
         setMainSettings((prevMainSettings:any) => {
             console.log(prevMainSettings.exisitingDupesFound)
-            if (prevMainSettings.exisitingDupesFound.length > 0 || prevMainSettings.failedMappings.length > 0) {
+            if (userSettings.settings?.openLogAfterConvert !== false || prevMainSettings.exisitingDupesFound.length > 0 || prevMainSettings.failedMappings.length > 0) {
                 console.log('if ran')
                 setIsOpen(true)
             }
@@ -556,7 +564,7 @@ export default function Home() {
     const newWS = XLSX.utils.json_to_sheet(mainSettings.convertedSheet, { header: sheetHeaders })
     const newWB = XLSX.utils.book_new()
     XLSX.utils.book_append_sheet(newWB, newWS, "NewDownload" )
-    XLSX.writeFile(newWB, `simpleExcelConvertDownload.xlsx`)
+    XLSX.writeFile(newWB, buildDownloadFileName(mainSettings.company, userSettings.settings))
   }
 
   /* Handles Toop Tip Text */
@@ -598,14 +606,24 @@ export default function Home() {
                     : 
                         <div className={`absolute right-0 top-full mt-2 z-20 ${panelStyles} flex flex-col p-2 min-w-full text-[#EDF1FB] font-[family-name:var(--font-geist-sans)]`}>
                             <button className='text-xl px-4 py-3 rounded-xl hover:bg-[#093390] text-left whitespace-nowrap' onClick={handleOpenSettings}>Settings</button>
-                            <button className='text-xl px-4 py-3 rounded-xl hover:bg-[#093390] text-left whitespace-nowrap' onClick={handleSignOut}>Sign Out</button>
+                            <button className='text-xl px-4 py-3 rounded-xl hover:bg-[#093390] text-left whitespace-nowrap' onClick={requestSignOut}>Sign Out</button>
                         </div>
                     }
                 </div>
             </nav>
             <div id='Body' className='min-w-[50%] flex-1 px-4 py-4'>
                 <Modal isOpen={isOpen} setIsOpen={setIsOpen} mainSettings={mainSettings} userSettings={userSettings}/>
-                <SettingsModal isOpen={settingsModalIsOpen} setIsOpen={setSettingsModalIsOpen}/>
+                <SettingsModal
+                    isOpen={settingsModalIsOpen}
+                    setIsOpen={setSettingsModalIsOpen}
+                    settings={userSettings.settings}
+                    onSave={(settings) => setUserSettings((prevUserSettings: any) => ({ ...prevUserSettings, settings }))}
+                />
+                <SignOutConfirm
+                    isOpen={signOutConfirmIsOpen}
+                    onCancel={() => setSignOutConfirmIsOpen(false)}
+                    onConfirm={handleSignOut}
+                />
                 <div className={`${panelStyles} p-6 min-h-[25%] min-w-[55%] justify-self-center mx-auto ${mainSettings.sheetName === '' || mainSettings.fieldNoteSheetName === '' ? 'content-center' : ''}`}>
                     <FileImporter defaultMainSettings={defaultMainSettings} mainSettings={mainSettings} setMainSettings={setMainSettings} workbook={workbook} setWorkbook={setWorkbook} fielfieldNoteSheet={fieldNoteSheet} setFieldNoteSheet={setFieldNoteSheet} userSettings={userSettings}/>
         
