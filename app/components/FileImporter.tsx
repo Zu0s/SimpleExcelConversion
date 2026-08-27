@@ -190,7 +190,7 @@ export default function FileImporter(props: any) {
         >
 
             <div className={`flex ${ props.mainSettings.sheetName !== '' || props.mainSettings.fieldNoteSheetName !== '' ? 'flex-row gap-4 p-4 justify-between self-center w-full' : 'flex-col items-center justify-center gap-4 p-4 mx-auto' }` }>
-                { props.mainSettings.sheetName !== '' || props.mainSettings.fieldNoteSheetName !== '' ? null : <p className={`file-importer--text ${isDragging === true ? 'allowChildDragging' : ''} text-5xl text-center`}>Select Files Below</p> }
+                { props.mainSettings.sheetName !== '' || props.mainSettings.fieldNoteSheetName !== '' ? null : <p className={`file-importer--text ${isDragging === true ? 'allowChildDragging' : ''} text-5xl md:max-lg:text-4xl text-center`}>Select Files Below</p> }
                 
                 <div className={` flex ${ props.mainSettings.sheetName !== '' || props.mainSettings.fieldNoteSheetName !== '' ? 'flex-col': 'flex-col items-center gap-4'} `}>
                     <label className={`  
@@ -244,7 +244,7 @@ export default function FileImporter(props: any) {
                 }
             </div>
             {props.mainSettings.sheetName !== '' || props.mainSettings.fieldNoteSheetName !== '' ?
-                <div className={`${panelStyles} p-5 flex flex-col gap-4 text-2xl`}>
+                <div className={`${panelStyles} p-5 flex flex-col gap-4 text-2xl modifications-panel`}>
 
                     <h1 className=' w-fit text-3xl'>Modifications</h1>
                     <div>    
@@ -289,10 +289,11 @@ export default function FileImporter(props: any) {
                             onChange={handleSelectChange}
                         />
                     </div>
-                    <div>
+                    <div className="modifications-spheres md:max-lg:pb-0">
                         <label className='modification-subTitle'>Spheres - (Multiple)</label>
                         <Select 
                             name='spheres'
+                            classNamePrefix='sec-select'
                             styles={selectStyles}
                             isMulti
                             className=''

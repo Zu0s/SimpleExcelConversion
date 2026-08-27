@@ -609,7 +609,7 @@ export default function Home() {
                     <div className=''>
                         <h1 className='text-5xl text-center text-[#EDF1FB]'>Enter Password</h1>
                     </div>
-                    <div className='flex flex-row gap-4 items-center'>
+                    <div className='flex flex-row gap-4 items-center md:max-lg:flex-col md:max-lg:items-stretch'>
                         <input
                             className='bg-[#000C47] border-2 border-[#0B3FB6] p-2 px-8 focus:outline-hidden outline-none w-full rounded-xl text-3xl text-center font-bold text-[#EDF1FB]'
                             type='password'
@@ -617,26 +617,31 @@ export default function Home() {
                             value={passInput}
                         >
                         </input>
-                        <button onClick={handleSubmit} className={`${techButtonStyles} w-fit`}>Submit</button>
+                        <button onClick={handleSubmit} className={`${techButtonStyles} w-fit md:max-lg:w-full`}>Submit</button>
                     </div>
                 </form>
             </div>
         :
         <div  className={`${isOpen === true ? 'blur-sm': ''} min-h-screen flex flex-col flex-1 ${pageGradientStyles} font-[family-name:var(--font-geist-sans)]`}>
         {/* Main View */}    
-            <nav id='Nav' className="mx-4 mt-4 flex flex-row items-stretch gap-2">
-                <div className={`${panelStyles} flex flex-1 items-center px-6 py-4 min-w-0`}>
+            <nav id='Nav' className={`mx-4 mt-4 flex flex-row items-stretch gap-2 md:max-lg:items-center md:max-lg:gap-0 md:max-lg:rounded-2xl md:max-lg:border-2 md:max-lg:border-[#0B3FB6] md:max-lg:bg-[#00132C] md:max-lg:px-6`}>
+                <div className={`${panelStyles} flex flex-1 items-center px-6 py-4 min-w-0 md:max-lg:rounded-none md:max-lg:border-0 md:max-lg:bg-transparent md:max-lg:px-0`}>
                     <h1 className='text-4xl text-[#EDF1FB]'>Simple Excel Conversion</h1>
                 </div>
-                <div className='relative overflow-visible shrink-0 self-stretch' ref={userMenuRef}>
+                <div className='relative overflow-visible shrink-0 self-stretch md:max-lg:self-center md:max-lg:flex md:max-lg:items-center' ref={userMenuRef}>
                     <button
                         type="button"
-                        className={`${panelStyles} h-full px-6 text-xl text-[#EDF1FB] hover:bg-[#093390] cursor-pointer flex items-center justify-center whitespace-nowrap`}
+                        className={`${panelStyles} h-full px-6 text-xl text-[#EDF1FB] hover:bg-[#093390] cursor-pointer flex items-center justify-center whitespace-nowrap md:max-lg:rounded-none md:max-lg:border-0 md:max-lg:bg-transparent md:max-lg:h-auto md:max-lg:px-3`}
                         onClick={handleNavIsOpen}
                     >{userButtonText}</button>
                     {  !navIsOpen ? null
                     : 
-                        <div className={`absolute top-full mt-2 right-0 z-20 ${panelStyles} flex flex-col text-[#EDF1FB] font-[family-name:var(--font-geist-sans)] ${settingsInDropdown ? 'p-8 min-w-[24rem] w-[min(32rem,calc(100vw-2rem))]' : signOutConfirmIsOpen ? 'p-8 min-w-[22rem] w-[min(28rem,calc(100vw-2rem))]' : 'p-2 min-w-full'}`}>
+                        <>
+                        <div
+                            className="hidden md:max-lg:block fixed inset-0 z-20 backdrop-blur-sm"
+                            onClick={closeUserDropdown}
+                        />
+                        <div className={`z-30 flex flex-col text-[#EDF1FB] font-[family-name:var(--font-geist-sans)] ${panelStyles} absolute top-full mt-2 right-0 md:max-lg:fixed md:max-lg:left-1/2 md:max-lg:top-1/2 md:max-lg:right-auto md:max-lg:mt-0 md:max-lg:-translate-x-1/2 md:max-lg:-translate-y-1/2 md:max-lg:max-h-[calc(100vh-2rem)] md:max-lg:overflow-y-auto ${settingsInDropdown ? 'p-8 min-w-[24rem] w-[min(32rem,calc(100vw-2rem))]' : signOutConfirmIsOpen ? 'p-8 min-w-[22rem] w-[min(28rem,calc(100vw-2rem))]' : 'p-2 min-w-full md:max-lg:min-w-[16rem] md:max-lg:w-[min(24rem,calc(100vw-2rem))]'}`}>
                             {settingsInDropdown ?
                                 <SettingsModal
                                     settings={userSettings.settings}
@@ -658,6 +663,7 @@ export default function Home() {
                                 </>
                             }
                         </div>
+                        </>
                     }
                 </div>
             </nav>
