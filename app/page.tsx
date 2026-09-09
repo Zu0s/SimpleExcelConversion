@@ -51,13 +51,12 @@ export default function Home() {
     /* Handles Password */
     const [passInput, setPassInput] = useState<string>('')
 
-    /* Website check if user has a password */
     const [userSettings, setUserSettings]: any = useState({ 
-        password: '', 
         user: '',
         settingIsOpen: false,
         userProfileIsOpen: false
     })
+    const [authReady, setAuthReady] = useState(false)
     
     /* Define text for the user Button */
     /*
@@ -112,48 +111,64 @@ export default function Home() {
         setPassInput(() => (value))
     }
 
-    function checkPass(inputPass: string) { /* Future make this api request */
-        const foundUser = shittyDb.users.find((currentUser) => (inputPass === currentUser.password))
-        if (foundUser) {
-            setUserSettings((prevUserSettings: any) => {
-
-                return ({ // allow access
-                    ...shittyDb[foundUser.user],
-                    password: foundUser.password,
-                    user: foundUser.user,
-                    settings: settingsForLogin(foundUser.user)
-                })
-            })
-            // console.log(userSettings)
-            setMainSettings((prevMainSettings: any) => { // should set main settings to be user settings 
-                const tempUser = shittyDb[foundUser.user]
-                return {
-                    ...prevMainSettings,
-                    spheres: tempUser.userPref.spheresOptionsPref
-                }
-            })
-            window.localStorage.setItem('tempPass', inputPass) /* MOVE TO DATABASE FUTURE */
-        } else {
-            setIsOpen(true)
-        }
+    function applyLoggedInUser(user: string) {
+        const profile = shittyDb[user] ?? shittyDb.guest
+        if (!profile) return false
+        setUserSettings({
+            ...profile,
+            user,
+            settingIsOpen: false,
+            userProfileIsOpen: false,
+            settings: settingsForLogin(user)
+        })
+        setMainSettings((prevMainSettings: any) => ({
+            ...prevMainSettings,
+            spheres: profile.userPref.spheresOptionsPref
+        }))
+        return true
     }
 
     function handleSignOut() {
         setSignOutConfirmIsOpen(false)
-        window.localStorage.removeItem('tempPass')
-        return window.location.reload();
+        fetch('/api/auth/logout', { method: 'POST' }).finally(() => {
+            window.location.reload()
+        })
     }
 
-    function handleSubmit(e: any) { 
+    async function handleSubmit(e: any) { 
         e.preventDefault();
-        checkPass(passInput)
+        const response = await fetch('/api/auth/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ password: passInput })
+        })
+        if (!response.ok) {
+            setIsOpen(true)
+            return
+        }
+        const data = await response.json()
+        if (typeof data?.user !== 'string' || !applyLoggedInUser(data.user)) {
+            setIsOpen(true)
+            return
+        }
+        setPassInput('')
     }
 
     useEffect(() => {
-        const userPref = window.localStorage.getItem('tempPass')
-
-        if(userPref) { 
-            checkPass(userPref)
+        let cancelled = false
+        fetch('/api/auth/me')
+            .then(async (response) => {
+                if (!response.ok) return
+                const data = await response.json()
+                if (!cancelled && typeof data?.user === 'string') {
+                    applyLoggedInUser(data.user)
+                }
+            })
+            .finally(() => {
+                if (!cancelled) setAuthReady(true)
+            })
+        return () => {
+            cancelled = true
         }
     }, [])
 
@@ -602,7 +617,9 @@ export default function Home() {
     return (
         <>
         {/* Password Page */}
-        { userSettings.password === '' ?
+        { !authReady ?
+            <div className={`w-screen h-screen ${pageGradientStyles}`} />
+        : userSettings.user === '' ?
             <div className={`flex items-center justify-center w-screen h-screen ${pageGradientStyles} font-[family-name:var(--font-geist-sans)]`}>
                 <Modal isOpen={isOpen} setIsOpen={setIsOpen} mainSettings={mainSettings} userSettings={userSettings}/>
                 <form onSubmit={handleSubmit} className={`${panelStyles} p-8 flex flex-col gap-6 w-[min(42rem,90vw)]`}>
