@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { Button, Dialog, DialogPanel, DialogTitle } from '@headlessui/react'
 import { panelStyles, techButtonStyles } from '../groupedStyles'
 
-export default function Modal(props: { isOpen: boolean, setIsOpen: Function, mainSettings: any, userSettings: { password: string, user: string } }) {
+export default function Modal(props: { isOpen: boolean, setIsOpen: Function, mainSettings: any, userSettings: { user: string } }) {
   const [toggleBox, setToggleBox] = useState({
     unmappedCollums: false,
     failedMappings: false
@@ -54,7 +54,7 @@ export default function Modal(props: { isOpen: boolean, setIsOpen: Function, mai
               transition
               className={`${props.mainSettings.exisitingDupesFound.length > 0 ? 'w-max ' : 'max-w-md'} ${panelStyles} flex flex-col w-full p-8 text-[#EDF1FB] font-[family-name:var(--font-geist-sans)] duration-300 ease-out data-[closed]:transform-[scale(95%)] data-[closed]:opacity-0`}
             >
-              { props.userSettings.password === '' ?
+              { props.userSettings.user === '' ?
                 <>
                 <DialogTitle as="h1" className="text-4xl justify-self-center self-center text-center" >
                   Error
